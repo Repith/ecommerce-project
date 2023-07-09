@@ -69,7 +69,7 @@ export default function StoreSwitcher({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-[200px] justify-between, cursor-pointer", className)}
         >
           <StoreIcon className="mr-2 h-4 w-4" />
           {currentStore?.label}
@@ -86,7 +86,7 @@ export default function StoreSwitcher({
                 <CommandItem
                   key={store.value}
                   onSelect={() => onStoreSelect(store)}
-                  className="text-sm"
+                  className="text-sm cursor-pointer"
                 >
                   <StoreIcon className="mr-2 h-4 w-4" />
                   {store.label}
@@ -110,6 +110,7 @@ export default function StoreSwitcher({
                   setOpen(false);
                   storeModal.onOpen();
                 }}
+                className="cursor-pointer"
               >
                 <PlusCircle className="mr-2 h-5 w-5" />
                 Create Store

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { StoreModal } from "@/components/modals/store-model";
+import { StoreModal } from "@/components/modals/store-modal";
 
 //Until lifecycle has run (client componenent) return null (server client)
 //Avoid hydration error
