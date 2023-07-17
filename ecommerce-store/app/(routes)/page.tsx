@@ -1,5 +1,11 @@
+import Container from "@/components/ui/container";
+
 const HomePage = () => {
-  return <div>Home Page</div>;
+  return (
+    <Container>
+      <div className="space-y-10 pb-10"></div>
+    </Container>
+  );
 };
 
 export default HomePage;
