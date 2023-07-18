@@ -11,9 +11,9 @@ const Navbar = async () => {
   return (
     <div className="border-b">
       <Container>
-        <div className="relative px-4 sm:px-6 flex h-16 items-center">
-          <Link href="/" className="ml-r flex lg:ml-0 gap-x-2">
-            <p className="font-bold text-xl">STORE</p>
+        <div className="relative flex items-center h-16 px-4 sm:px-6">
+          <Link href="/" className="flex ml-r lg:ml-0 gap-x-2">
+            <p className="text-xl font-bold">STORE</p>
           </Link>
           <MainNav data={categories} />
           <NavbarActions />

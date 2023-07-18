@@ -26,12 +26,12 @@ export const ProductsClient: React.FC<ProductClientProps> = ({ data }) => {
           description="Manage products for your store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/products/new`)}>
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="w-4 h-4 mr-2" />
           Add new
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} searchKey="label" />
+      <DataTable columns={columns} data={data} searchKey="name" />
       <Heading title="API" description="API calls for Products"></Heading>
       <Separator />
       <ApiList entityName="products" entityIdName="productId" />

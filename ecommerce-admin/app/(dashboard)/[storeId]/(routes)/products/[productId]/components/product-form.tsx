@@ -147,7 +147,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             onClick={() => setOpen(true)}
             disabled={loading}
           >
-            <Trash className="h-4 w-4" />
+            <Trash className="w-4 h-4" />
           </Button>
         )}
       </div>
@@ -155,7 +155,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="w-full space-y-8"
         >
           <FormField
             control={form.control}
@@ -301,7 +301,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         <SelectItem key={color.id} value={color.id}>
                           <div className="flex items-center justify-start">
                             <div
-                              className=" h-3 w-3 mr-2 rounded-full border"
+                              className="w-3 h-3 mr-2 border rounded-full "
                               style={{ backgroundColor: `${color.value}` }}
                             />
                             <div>{color.name}</div>
@@ -318,7 +318,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               control={form.control}
               name="isFeatured"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start p-4 space-x-3 space-y-0 border rounded-md">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -340,7 +340,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               control={form.control}
               name="isArchived"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start p-4 space-x-3 space-y-0 border rounded-md">
                   <FormControl>
                     <Checkbox
                       checked={field.value}

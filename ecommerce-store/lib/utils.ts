@@ -1,27 +1,17 @@
 import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
-import { ReactNode, useEffect, useState } from "react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+
 }
 
-interface MountedCheckProps {
-  children: ReactNode;
-}
+// export const formatter = new Intl.NumberFormat("pl", {
+//   style: "currency",
+//   currency: "PLN",
+// });
 
-const MountedCheck: React.FC<MountedCheckProps> = ({ children }) => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
-
-  return children;
-};
-
-export default MountedCheck;
+export const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});

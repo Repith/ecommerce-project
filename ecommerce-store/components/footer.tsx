@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <footer className="bg-white border-t">
-      <div className="mx-auto py-10">
-        <p className="text-center text-xs text-black">
+      <div className="py-10 mx-auto">
+        <p className="text-xs text-center text-black">
           &copy; 2023 TestEcommerceStore, Iinc. All rights reserved.
         </p>
       </div>
