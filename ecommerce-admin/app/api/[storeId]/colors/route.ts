@@ -61,7 +61,7 @@ export async function GET(
 ) {
   try {
     if (!params.storeId) {
-      return new NextResponse("Store ID is required", { status: 400 });
+      return new NextResponse("Store id is required", { status: 400 });
     }
 
     const colors = await prismadb.color.findMany({
@@ -70,7 +70,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(sizes);
+    return NextResponse.json(colors);
   } catch (error) {
     console.log("[COLORS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
