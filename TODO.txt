@@ -1,0 +1,16 @@
+//TODO:
+1. + inStock to Prisma Product
+2. + quantity to product dashboard
+3. + cart functionality to add more items to cart
+4. + change cart as dialog 
+5. + on dashboard change inStock as sum of products in stock
+
+CHANGES:
+Reseeded Prisma DB with new data
+[ADMIN]
+- added switch from shadcn/ui
+- fixed theme changer
+- fixed toast provider
+[STORE]
+- created cart-dialog | summary-dialog | cart-item-dialog
+- fixed bug with disabled add-to-cart
