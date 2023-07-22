@@ -6,11 +6,10 @@
 5. + on dashboard change inStock as sum of products in stock
 
 CHANGES:
-Reseeded Prisma DB with new data
 [ADMIN]
-- added switch from shadcn/ui
-- fixed theme changer
-- fixed toast provider
+- created description in prisma db
 [STORE]
-- created cart-dialog | summary-dialog | cart-item-dialog
-- fixed bug with disabled add-to-cart
+- created description accordion in info components
+- added accordion | table from shadcn/ui
+- minor bug fixes
+- created size-table

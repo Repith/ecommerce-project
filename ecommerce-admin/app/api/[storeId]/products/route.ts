@@ -21,6 +21,8 @@ export async function POST(
       images,
       isFeatured,
       isArchived,
+      description,
+      inStock
     } = body;
 
     if (!userId) {
@@ -51,6 +53,14 @@ export async function POST(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
+    if (!description) {
+      return new NextResponse("Description is required", { status: 400 });
+    }
+
+    if (!inStock) {
+      return new NextResponse("Need at least 1 item in stock", { status: 400 });
+    }
+
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
     }
@@ -76,6 +86,8 @@ export async function POST(
         colorId,
         sizeId,
         storeId: params.storeId,
+        description,
+        inStock,
         images: {
           createMany: {
             data: [...images.map((image: { url: string }) => image)],

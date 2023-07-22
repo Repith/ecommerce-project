@@ -14,6 +14,7 @@ export type ProductColumn = {
   isFeatured: boolean;
   isArchived: boolean;
   createdAt: string;
+  inStock: number;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -54,7 +55,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
       </div>
     ),
   },
-
+  {
+    accessorKey: "inStock",
+    header: "In stock",
+  },
   {
     accessorKey: "createdAt",
     header: "Date",

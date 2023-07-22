@@ -5,7 +5,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { Product } from "@/types";
 
 interface CartStore {
-  items: Product[];
+  items: (Product & { quantity: number })[];
   addItem: (data: Product) => void;
   removeItem: (id: string) => void;
   removeAll: () => void;
@@ -23,11 +23,21 @@ const useCart = create(
           return toast("Item already in cart.");
         }
 
-        set({ items: [...get().items, data] });
+        set((state) => ({
+          items: [
+            ...state.items,
+            {
+              ...data,
+              quantity: 1,
+            },
+          ],
+        }));
         toast.success("Item added to cart.");
       },
       removeItem: (id: string) => {
-        set({ items: [...get().items.filter((item) => item.id !== id)] });
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
+        }));
         toast.success("Item removed from cart.");
       },
       removeAll: () => set({ items: [] }),

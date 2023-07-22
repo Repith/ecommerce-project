@@ -43,6 +43,8 @@ const formSchema = z.object({
   colorId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+  description: z.string().min(1),
+  inStock: z.coerce.number().min(1),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -71,7 +73,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit product" : "Create product";
-  const description = initialData ? "Edit product" : "Add a new product";
+  const subTitle = initialData ? "Edit product" : "Add a new product";
   const toastMessage = initialData ? "Product updated." : "Product created.";
   const action = initialData ? "Save changes" : "Create";
 
@@ -81,6 +83,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       ? {
           ...initialData,
           price: parseFloat(String(initialData?.price)),
+          inStock: parseFloat(String(initialData?.inStock)),
         }
       : {
           name: "",
@@ -91,6 +94,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           colorId: "",
           isFeatured: false,
           isArchived: false,
+          description: "",
+          inStock: 0,
         },
   });
 
@@ -138,8 +143,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         onConfirm={onDelete}
         loading={loading}
       />
+
+      {/* Product delete */}
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description}></Heading>
+        <Heading title={title} description={subTitle}></Heading>
         {initialData && (
           <Button
             variant="destructive"
@@ -157,6 +164,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
+          {/* Image(s) upload */}
           <FormField
             control={form.control}
             name="images"
@@ -182,6 +190,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             )}
           />
           <div className="grid grid-cols-3 gap-8">
+            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -199,6 +208,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* Price */}
             <FormField
               control={form.control}
               name="price"
@@ -212,6 +223,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* Category */}
             <FormField
               control={form.control}
               name="categoryId"
@@ -244,6 +257,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* Size */}
             <FormField
               control={form.control}
               name="sizeId"
@@ -276,6 +291,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* Color */}
             <FormField
               control={form.control}
               name="colorId"
@@ -314,6 +331,45 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Product description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* In stock */}
+            <FormField
+              control={form.control}
+              name="inStock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="In stock"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Is Featured | Is Archived */}
             <FormField
               control={form.control}
               name="isFeatured"

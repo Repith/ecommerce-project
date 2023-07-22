@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -12,7 +10,7 @@ import { MountedCheck } from "@/lib/mounted-check";
 
 const Summary = () => {
   const searchParams = useSearchParams();
-  const items = useCart((state) => state.items);
+  const cartItems = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
 
   useEffect(() => {
@@ -26,15 +24,20 @@ const Summary = () => {
     }
   }, [searchParams, removeAll]);
 
-  const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.price);
+  const totalPrice = cartItems.reduce((total, item) => {
+    return total + item.price * item.quantity;
   }, 0);
 
   const onCheckout = async () => {
+    const productIdsWithQuantities = cartItems.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity,
+    }));
+
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
       {
-        productIds: items.map((item) => item.id),
+        productIds: productIdsWithQuantities,
       }
     );
 
@@ -46,6 +49,19 @@ const Summary = () => {
       <div className="px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
         <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
         <div className="mt-6 space-y-4">
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between pt-4 border-t border-gray-200"
+            >
+              <div className="text-base font-light text-gray-500">
+                {item.name} (x{item.quantity})
+              </div>
+              <div className="text-sm font-light text-gray-500">
+                <Currency value={item.price * item.quantity} />
+              </div>
+            </div>
+          ))}
           <div className="flex items-center justify-between pt-4 border-t border-gray-200">
             <div className="text-base font-medium text-gray-900">
               Order total
@@ -55,7 +71,7 @@ const Summary = () => {
         </div>
         <Button
           onClick={onCheckout}
-          disabled={items.length === 0}
+          disabled={cartItems.length === 0}
           className="w-full mt-6"
         >
           Checkout
