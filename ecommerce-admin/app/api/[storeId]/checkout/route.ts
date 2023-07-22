@@ -1,8 +1,8 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
-import { stripe } from "@/lib/stripe";
-import prismadb from "@/lib/prismadb";
+const prisma = new PrismaClient();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,33 +10,32 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
-}
-
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
   const { productIds } = await req.json();
 
-  if (!productIds || productIds.length === 0) {
-    return new NextResponse("Product ids are required", { status: 400 });
-  }
+  const quantities = productIds.map((item) => item.quantity);
 
-  const products = await prismadb.product.findMany({
+  const products = await prisma.product.findMany({
     where: {
       id: {
-        in: productIds,
+        in: productIds.map((item) => item.productId),
       },
     },
   });
 
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-  products.forEach((product) => {
+  products.forEach((product, index) => {
+    const quantity = quantities[index];
+    if (quantity <= 0) {
+      throw new Error(`Invalid quantity for product "${product.name}"`);
+    }
+
     line_items.push({
-      quantity: 1,
+      quantity,
       price_data: {
         currency: "USD",
         product_data: {
@@ -47,21 +46,56 @@ export async function POST(
     });
   });
 
-  const order = await prismadb.order.create({
-    data: {
-      storeId: params.storeId,
-      isPaid: false,
-      orderItems: {
-        create: productIds.map((productId: string) => ({
-          product: {
-            connect: {
-              id: productId,
-            },
+  let order;
+  try {
+    await prisma.$transaction(async (prisma) => {
+      order = await prisma.order.create({
+        data: {
+          storeId: params.storeId,
+          isPaid: false,
+          orderItems: {
+            create: productIds.map((item) => ({
+              product: {
+                connect: {
+                  id: item.productId,
+                },
+              },
+              quantity: item.quantity,
+            })),
           },
-        })),
-      },
-    },
-  });
+        },
+      });
+
+      const productIdsToUpdate = productIds.map((item) => item.productId);
+      const productsToUpdate = await prisma.product.findMany({
+        where: {
+          id: {
+            in: productIdsToUpdate,
+          },
+        },
+      });
+
+      for (const productToUpdate of productsToUpdate) {
+        const orderedQuantity =
+          productIds.find((item) => item.productId === productToUpdate.id)
+            ?.quantity || 0;
+
+        await prisma.product.update({
+          where: {
+            id: productToUpdate.id,
+          },
+          data: {
+            isArchived: true,
+            inStock: productToUpdate.inStock - orderedQuantity,
+          },
+        });
+      }
+    });
+  } catch (error) {
+    return new NextResponse(`Error processing order: ${error.message}`, {
+      status: 500,
+    });
+  }
 
   const session = await stripe.checkout.sessions.create({
     line_items,
@@ -77,10 +111,5 @@ export async function POST(
     },
   });
 
-  return NextResponse.json(
-    { url: session.url },
-    {
-      headers: corsHeaders,
-    }
-  );
+  return NextResponse.json({ url: session.url }, { headers: corsHeaders });
 }

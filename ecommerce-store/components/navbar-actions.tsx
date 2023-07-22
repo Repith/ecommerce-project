@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { MountedCheck } from "@/lib/mounted-check";
 import useCart from "@/hooks/use-cart";
 
-import { Product } from "@/types";
 import CartDialog from "@/components/dialog/cart-dialog";
 
 const NavbarActions = () => {

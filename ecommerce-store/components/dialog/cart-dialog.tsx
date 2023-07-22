@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { ShoppingBag, X } from "lucide-react";
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 
 import { MountedCheck } from "@/lib/mounted-check";
 import { Product } from "@/types";
@@ -39,63 +39,84 @@ const CartDialog = () => {
           {cart.items.length}
         </span>
       </Button>
+      <Transition show={open} as={Fragment}>
+        <Dialog
+          open={open}
+          as="div"
+          className="relative z-40 shadow-xl"
+          onClose={onClose}
+        >
+          {/* Background color and opacity */}
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
 
-      <Dialog
-        open={open}
-        as="div"
-        className="relative z-40 shadow-xl"
-        onClose={onClose}
-      >
-        {/* Background color and opacity */}
-        <div className="fixed inset-0 bg-black bg-opacity-25" />
-
-        {/* Dialog position */}
-        <div className="fixed inset-0 z-40 flex">
-          <Dialog.Panel className="relative flex flex-col w-full h-full max-w-md py-4 ml-auto overflow-y-auto bg-white shadow-xl">
-            {/* Close button */}
-            <div className="flex items-center justify-end px-4">
-              <IconButton icon={<X size={15} />} onClick={onClose} />
-            </div>
-            {/* Item(s) container */}
-            <div className="p-4">
-              <Container>
-                <div className="px-2 ">
-                  <h1 className="text-3xl font-bold text-black">
-                    Shopping Cart
-                  </h1>
-                  <div className="">
-                    <div className="py-4">
-                      {cart.items.length === 0 && (
-                        <p className="text-neutral-500">
-                          No items added to cart.
-                        </p>
-                      )}
-                      <ul>
-                        {cart.items.map((item) => (
-                          <CartItemDialog key={item.id} data={item} />
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Summary */}
-                    <DialogSummary />
-                  </div>
+          {/* Dialog position */}
+          <div className="fixed inset-0 z-40 flex">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="relative flex flex-col w-full h-full max-w-md py-4 ml-auto overflow-y-auto bg-white shadow-xl">
+                {/* Close button */}
+                <div className="flex items-center justify-end px-4">
+                  <IconButton icon={<X size={15} />} onClick={onClose} />
                 </div>
-              </Container>
-            </div>
-            {/* Checkout button */}
-            <div className="px-6">
-              <Button
-                onClick={toCheckout}
-                disabled={items.length === 0}
-                className="w-full"
-              >
-                Go to checkout
-              </Button>
-            </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+                {/* Item(s) container */}
+                <div className="p-4">
+                  <Container>
+                    <div className="px-2 ">
+                      <h1 className="text-3xl font-bold text-black">
+                        Shopping Cart
+                      </h1>
+                      <div className="">
+                        <div className="py-4">
+                          {cart.items.length === 0 && (
+                            <p className="text-neutral-500">
+                              No items added to cart.
+                            </p>
+                          )}
+                          <ul>
+                            {cart.items.map((item) => (
+                              <CartItemDialog key={item.id} data={item} />
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Summary */}
+                        <DialogSummary />
+                      </div>
+                    </div>
+                  </Container>
+                </div>
+                {/* Checkout button */}
+                <div className="px-6">
+                  <Button
+                    onClick={toCheckout}
+                    disabled={items.length === 0}
+                    className="w-full"
+                  >
+                    Go to checkout
+                  </Button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </MountedCheck>
   );
 };

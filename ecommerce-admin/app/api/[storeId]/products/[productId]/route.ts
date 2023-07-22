@@ -49,6 +49,8 @@ export async function PATCH(
       sizeId,
       isFeatured,
       isArchived,
+      description,
+      inStock
     } = body;
 
     if (!userId) {
@@ -83,6 +85,14 @@ export async function PATCH(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
+    if (!description) {
+      return new NextResponse("Description is required", { status: 400 });
+    }
+    
+    if (!inStock) {
+      return new NextResponse("Need at least 1 item in stock", { status: 400 });
+    }
+
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
@@ -104,6 +114,8 @@ export async function PATCH(
         categoryId,
         colorId,
         sizeId,
+        description,
+        inStock,
         images: {
           deleteMany: {},
         },

@@ -77,23 +77,25 @@ model Color {
 }
 
 model Product {
-  id         String      @id @default(uuid())
-  storeId    String
-  store      Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId String
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name       String
-  price      Decimal
-  isFeatured Boolean     @default(false)
-  isArchived Boolean     @default(false)
-  sizeId     String
-  size       Size        @relation(fields: [sizeId], references: [id])
-  colorId    String
-  color      Color       @relation(fields: [colorId], references: [id])
-  orderItems OrderItem[]
-  images     Image[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id          String      @id @default(uuid())
+  storeId     String
+  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId  String
+  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name        String
+  price       Decimal
+  isFeatured  Boolean     @default(false)
+  isArchived  Boolean     @default(false)
+  description String
+  sizeId      String
+  size        Size        @relation(fields: [sizeId], references: [id])
+  colorId     String
+  color       Color       @relation(fields: [colorId], references: [id])
+  orderItems  OrderItem[]
+  images      Image[]
+  inStock     Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -132,6 +134,7 @@ model OrderItem {
   orderId   String
   product   Product @relation(fields: [productId], references: [id])
   productId String
+  quantity  Int
 
   @@index([orderId])
   @@index([productId])
