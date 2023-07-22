@@ -28,6 +28,8 @@ const CartDialog = () => {
     onClose();
   };
 
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <MountedCheck>
       <Button
@@ -36,7 +38,7 @@ const CartDialog = () => {
       >
         <ShoppingBag size={20} color="white" />
         <span className="ml-2 text-sm font-medium text-white">
-          {cart.items.length}
+          {totalItems}
         </span>
       </Button>
       <Transition show={open} as={Fragment}>
