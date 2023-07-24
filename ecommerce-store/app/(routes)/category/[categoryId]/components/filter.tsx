@@ -17,17 +17,25 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const selectedValue = searchParams.get(valueKey);
+  const selectedValues = searchParams.get(valueKey)?.split(",") || [];
 
   const onClick = (id: string) => {
     const current = qs.parse(searchParams.toString());
 
+    let values = (current[valueKey] || "").split(",").filter(Boolean);
+
+    if (values.includes(id)) {
+      values = values.filter((value) => value !== id);
+    } else {
+      values.push(id);
+    }
+
     const query = {
       ...current,
-      [valueKey]: id,
+      [valueKey]: values.join(","),
     };
 
-    if (current[valueKey] === id) {
+    if (values.length === 0) {
       query[valueKey] = null;
     }
 
@@ -52,7 +60,7 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
             <Button
               className={cn(
                 "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
-                selectedValue === filter.id && "bg-black text-white"
+                selectedValues.includes(filter.id) && "bg-black text-white"
               )}
               onClick={() => onClick(filter.id)}
             >

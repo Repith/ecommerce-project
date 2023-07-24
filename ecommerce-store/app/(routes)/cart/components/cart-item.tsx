@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { X } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, X } from "lucide-react";
 
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
@@ -14,10 +14,6 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
   const cart = useCart();
 
-  const onRemove = () => {
-    cart.removeItem(data.id);
-  };
-
   return (
     <li className="flex py-6 border-b">
       <div className="relative w-24 h-24 overflow-hidden rounded-md sm:h-48 sm:w-48">
@@ -29,21 +25,47 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
         />
       </div>
       <div className="relative flex flex-col justify-between flex-1 ml-4 sm:ml-6">
-        <div className="absolute top-0 right-0 z-10">
-          <IconButton onClick={onRemove} icon={<X size={15} />} />
-        </div>
-        <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-          <div className="flex justify-between">
+        <div className="flex items-start justify-between">
+          <div>
             <p className="text-lg font-semibold text-black ">{data.name}</p>
+            <div className="mt-1 mb-2 text-sm ">
+              <div className="flex flex-row">
+                <p className="text-gray-500">Color: </p>
+                <p className="font-semibold">&nbsp;{data.color.name}</p>
+              </div>
+              <div className="flex flex-row">
+                <p className="text-gray-500 ">Size:</p>
+                <p className="font-semibold">&nbsp;{data.size.value}</p>
+              </div>
+            </div>
           </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconButton
+                onClick={() => cart.removeItem(data.id)}
+                icon={<Trash2 size={15} />}
+                aria-label="Remove item"
+                className="ml-4"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex items-end justify-between">
+          <div className="flex items-center gap-x-2">
+            <IconButton
+              onClick={() => cart.decreaseItem(data.id)}
+              icon={<ChevronDown size={15} />}
+              aria-label="Decrease quantity"
+            />
+            <p className="mx-2">{data.quantity}</p>
 
-          <div className="flex mt-1 text-sm">
-            <p className="text-gray-500">{data.color.name}</p>
-            <p className="pl-4 ml-4 text-gray-500 border-l border-gray-200">
-              {data.size.name}
-            </p>
+            <IconButton
+              onClick={() => cart.addItem(data)}
+              icon={<ChevronUp size={15} />}
+              aria-label="Increase quantity"
+            />
           </div>
-          <Currency value={data.price} />
+          <Currency value={data.price * data.quantity} aria-label="Checkout" />
         </div>
       </div>
     </li>

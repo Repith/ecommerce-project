@@ -2,12 +2,14 @@ import getColors from "@/actions/get-colors";
 import getCategory from "@/actions/get-category";
 import getProducts from "@/actions/get-products";
 import getSizes from "@/actions/get-sizes";
-import Container from "@/components/ui/container";
-import Billboard from "@/components/billboard";
+
 import Filter from "./components/filter";
+import MobileFilters from "./components/mobile-filters";
+
+import Billboard from "@/components/billboard";
+import Container from "@/components/ui/container";
 import ProductCard from "@/components/ui/product-card";
 import NoResults from "@/components/ui/no-results";
-import MobileFilters from "./components/mobile-filters";
 
 export const revalidate = 0;
 
@@ -39,7 +41,10 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
     <div className="bg-white">
       <Container>
         {/* Category billboard  */}
-        <Billboard data={category.billboard} />
+        <Billboard
+          data={category.billboard}
+          additionalProps="transition aspect-[4/1]"
+        />
         <div className="px-4 pb-24 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
             {/* Filter */}

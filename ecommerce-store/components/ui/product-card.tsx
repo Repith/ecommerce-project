@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
@@ -16,9 +17,20 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
+  const [loading, setLoading] = useState(true);
   const previewModal = usePreviewModal();
   const router = useRouter();
   const cart = useCart();
+
+  // Symulacja opóźnienia ładowania.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Opóźnienie 2 sekundy
+
+    // Wyczyszczenie timera po unmountingu.
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleClick = () => {
     router.push(`/product/${data?.id}`);
@@ -36,6 +48,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     cart.addItem(data);
   };
 
+  if (loading) {
+    // Skeleton/loading state
+    return (
+      <div className="animate-pulse">
+        <div className="h-32 bg-gray-200"></div>
+        <div className="h-4 mt-2 bg-gray-200"></div>
+        <div className="h-4 mt-1 bg-gray-200"></div>
+        <div className="h-4 mt-1 bg-gray-200"></div>
+      </div>
+    );
+  }
+
+  // Normal state
   return (
     <div
       onClick={handleClick}

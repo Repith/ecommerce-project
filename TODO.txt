@@ -1,15 +1,11 @@
-//TODO:
-1. + inStock to Prisma Product
-2. + quantity to product dashboard
-3. + cart functionality to add more items to cart
-4. + change cart as dialog 
-5. + on dashboard change inStock as sum of products in stock
-
-CHANGES:
 [ADMIN]
-- created description in prisma db
+- connected all routes from chekout and webhook to Stripe payments
+- manage error handling in there are not enough products in store (toast message of what item is missing)
 [STORE]
-- created description accordion in info components
-- added accordion | table from shadcn/ui
-- minor bug fixes
-- created size-table
+- redisigned cart-item tab and cart-item-dialog
+- created  
+- added additionl summary of products to Checkout
+- added className attribute to Currency
+- implemented skeleton loading for products
+- created new gallery and adapted it to modal-dialog
+- changed billboard in categories

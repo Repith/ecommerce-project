@@ -1,16 +1,19 @@
 "use client";
 
 import { MountedCheck } from "@/lib/mounted-check";
-import { formatter } from "@/lib/utils";
+import { cn, formatter } from "@/lib/utils";
 
 interface CurrencyProps {
   value?: string | number;
+  className?: string[];
 }
 
-const Currency: React.FC<CurrencyProps> = ({ value }) => {
+const Currency: React.FC<CurrencyProps> = ({ value, className }) => {
   return (
     <MountedCheck>
-      <span className="font-semibold">{formatter.format(Number(value))}</span>
+      <span className={cn("font-semibold", ...(className || []))}>
+        {formatter.format(Number(value))}
+      </span>
     </MountedCheck>
   );
 };

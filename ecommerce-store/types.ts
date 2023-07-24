@@ -21,6 +21,7 @@ export interface Product {
   images: Image[]
   description: string;
   quantity: number;
+  inStock: number;
 };
 
 export interface Size {

@@ -34,7 +34,9 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
         </div>
         <div className="relative pr-9 ">
           <div className="flex justify-between">
-            <p className="text-lg font-semibold text-black ">{data.name}</p>
+            <p className="text-lg font-semibold text-black ">
+              {data.name} (x{data.quantity})
+            </p>
           </div>
 
           <div className="flex mt-1 mb-2 text-sm">
@@ -45,7 +47,7 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
             </p>
             <p className="font-semibold">&nbsp;{data.size.value}</p>
           </div>
-          <Currency value={data.price} />
+          <Currency value={data.price * data.quantity} />
         </div>
       </div>
     </li>

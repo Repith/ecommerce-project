@@ -356,7 +356,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               name="inStock"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>In stock</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}

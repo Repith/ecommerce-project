@@ -13,7 +13,7 @@ const HomePage = async () => {
   return (
     <Container>
       <div className="pb-4 space-y-10">
-        <Billboard data={billboard} />
+        <Billboard data={billboard} additionalProps="transition aspect-[3/1]" />
       </div>
 
       <div className="flex flex-col px-8 gap-y-8 sm:px-6 lg:px-8">

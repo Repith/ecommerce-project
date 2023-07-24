@@ -10,23 +10,29 @@ interface CartStore {
   addItem: (data: Product) => void;
   removeItem: (id: string) => void;
   removeAll: () => void;
+  decreaseItem: (id: string) => void;
 }
 
 const useCart = create(
   persist<CartStore>((set, get) => ({
   items: [],
+  
   addItem: (data: Product) => {
     const currentItems = get().items;
     const existingItemIndex = currentItems.findIndex((item) => item.id === data.id);
   
     if (existingItemIndex !== -1) {
-      set((state) => {
-        const newItems = [...state.items];
-        if (newItems[existingItemIndex]) {
-          newItems[existingItemIndex].quantity += 1;
-        }
-        return { items: newItems };
-      });
+      if (currentItems[existingItemIndex].quantity + 1 > data.inStock) {
+        toast.error(`You can't add more of ${data.name}. Not enough in stock.`);
+      } else {
+        set((state) => {
+          const newItems = [...state.items];
+          if (newItems[existingItemIndex]) {
+            newItems[existingItemIndex].quantity += 1;
+          }
+          return { items: newItems };
+        });
+      }
     } else {
       set((state) => ({
         items: [
@@ -37,25 +43,38 @@ const useCart = create(
           },
         ],
       }));
+      toast.success('Item added to cart.');
     }
-  
-    toast.success('Item added to cart.');
   },
   
-  // removeItem: (id: string) => {
-  //   set({ items: [...get().items.filter((item) => item.id !== id)] });
-  //   toast.success('Item removed from cart.');
-  // },
-
+  
   removeItem: (id: string) => {
-    set((state) => {
-      const newItems = state.items.map((item) => 
-        item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-      ).filter((item) => !(item.id === id && item.quantity === 1));
-      return { items: newItems };
-    });
+    set({ items: [...get().items.filter((item) => item.id !== id)] });
     toast.success('Item removed from cart.');
   },
+
+  decreaseItem: (id: string) => {
+    const currentItems = get().items;
+    const existingItemIndex = currentItems.findIndex((item) => item.id === id);
+  
+    if (existingItemIndex !== -1) {
+      if (currentItems[existingItemIndex].quantity > 1) {
+        set((state) => {
+          const newItems = [...state.items];
+          if (newItems[existingItemIndex]) {
+            newItems[existingItemIndex].quantity -= 1;
+          }
+          return { items: newItems };
+        });
+      } else {
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
+        }));
+        toast.success('Item removed from cart.');
+      }
+    }
+  },
+  
   
 
   removeAll: () => set({ items: [] }),
