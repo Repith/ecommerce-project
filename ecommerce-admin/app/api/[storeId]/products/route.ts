@@ -16,13 +16,11 @@ export async function POST(
       name,
       price,
       categoryId,
-      colorId,
-      sizeId,
       images,
+      variants,
       isFeatured,
       isArchived,
       description,
-      inStock
     } = body;
 
     if (!userId) {
@@ -45,20 +43,13 @@ export async function POST(
       return new NextResponse("Category id is required", { status: 400 });
     }
 
-    if (!colorId) {
-      return new NextResponse("Color id is required", { status: 400 });
-    }
-
-    if (!sizeId) {
-      return new NextResponse("Size id is required", { status: 400 });
-    }
 
     if (!description) {
       return new NextResponse("Description is required", { status: 400 });
     }
 
-    if (!inStock) {
-      return new NextResponse("Need at least 1 item in stock", { status: 400 });
+    if (!variants) {
+      return new NextResponse("Need at least 1 variant of a product", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -83,11 +74,13 @@ export async function POST(
         isFeatured,
         isArchived,
         categoryId,
-        colorId,
-        sizeId,
         storeId: params.storeId,
         description,
-        inStock,
+        variants: {
+          createMany: {
+            data: [...variants.map((variant: {inStock: number, sizeId: string, colorId: string}) => variant)]
+          }
+        },
         images: {
           createMany: {
             data: [...images.map((image: { url: string }) => image)],
@@ -122,16 +115,12 @@ export async function GET(
       where: {
         storeId: params.storeId,
         categoryId,
-        colorId,
-        sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
       include: {
         images: true,
-        category: true,
-        color: true,
-        size: true,
+        variants: true,
       },
       orderBy: {
         createdAt: "desc",

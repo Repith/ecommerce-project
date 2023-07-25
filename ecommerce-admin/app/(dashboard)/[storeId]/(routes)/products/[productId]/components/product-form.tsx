@@ -2,12 +2,12 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import { Category, Color, Image, Product, Size, Variant } from "@prisma/client";
 import { Trash } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import ImageUpload from "@/components/ui/image-upload";
@@ -34,17 +34,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const variantSchema = z.object({
+  sizeId: z.string().min(1),
+  colorId: z.string().min(1),
+  inStock: z.coerce.number().min(1),
+});
+
 const formSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
-  sizeId: z.string().min(1),
-  colorId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
   description: z.string().min(1),
-  inStock: z.coerce.number().min(1),
+  variants: z.array(variantSchema),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -53,6 +57,7 @@ interface ProductFormProps {
   initialData:
     | (Product & {
         images: Image[];
+        variants: Variant[];
       })
     | null;
   categories: Category[];
@@ -83,21 +88,30 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       ? {
           ...initialData,
           price: parseFloat(String(initialData?.price)),
-          inStock: parseFloat(String(initialData?.inStock)),
+          variants: initialData.variants.map((variant) => ({
+            ...variant,
+            inStock: parseFloat(String(variant?.inStock)),
+          })),
         }
       : {
           name: "",
           images: [],
           price: 0,
           categoryId: "",
-          sizeId: "",
-          colorId: "",
           isFeatured: false,
           isArchived: false,
           description: "",
-          inStock: 0,
+          variants: [
+            {
+              sizeId: "",
+              colorId: "",
+              inStock: 1,
+            },
+          ],
         },
   });
+
+  const variants = form.watch("variants");
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -111,7 +125,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         await axios.post(`/api/${params.storeId}/products`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/products`);
+      router.push(`/${params.storeId}/products/${params.productId}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong.");
@@ -159,9 +173,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         )}
       </div>
       <Separator />
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
           className="w-full space-y-8"
         >
           {/* Image(s) upload */}
@@ -208,7 +224,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-
             {/* Price */}
             <FormField
               control={form.control}
@@ -223,7 +238,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-
             {/* Category */}
             <FormField
               control={form.control}
@@ -258,80 +272,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               )}
             />
 
-            {/* Size */}
-            <FormField
-              control={form.control}
-              name="sizeId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Size</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a size"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {sizes.map((size) => (
-                        <SelectItem key={size.id} value={size.id}>
-                          {size.name} ({size.value})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Color */}
-            <FormField
-              control={form.control}
-              name="colorId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Color</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a color"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem key={color.id} value={color.id}>
-                          <div className="flex items-center justify-start">
-                            <div
-                              className="w-3 h-3 mr-2 border rounded-full "
-                              style={{ backgroundColor: `${color.value}` }}
-                            />
-                            <div>{color.name}</div>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Description */}
             <FormField
               control={form.control}
               name="description"
@@ -342,25 +282,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <Input
                       disabled={loading}
                       placeholder="Product description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* In stock */}
-            <FormField
-              control={form.control}
-              name="inStock"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>In stock</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="In stock"
                       {...field}
                     />
                   </FormControl>
@@ -392,6 +313,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="isArchived"
@@ -414,6 +336,134 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* Variants */}
+            <FormField
+              control={form.control}
+              name="variants"
+              render={({ field }) => (
+                <div>
+                  {variants.map((variant, index) => (
+                    <div key={index} className="grid grid-cols-4 gap-8">
+                      <FormItem>
+                        <FormLabel>Color</FormLabel>
+                        <Select
+                          disabled={loading}
+                          onValueChange={(value) => {
+                            const newVariants = [...variants];
+                            if (newVariants[index]) {
+                              newVariants[index].colorId = value;
+                              field.onChange(newVariants);
+                            }
+                          }}
+                          value={variant.colorId}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                defaultValue={variant.colorId}
+                                placeholder="Select a color"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {colors.map((color) => (
+                              <SelectItem key={color.id} value={color.name}>
+                                {color.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+
+                      <FormItem>
+                        <FormLabel>Size</FormLabel>
+                        <Select
+                          disabled={loading}
+                          onValueChange={(value) => {
+                            const newVariants = [...variants];
+                            newVariants[index].sizeId = value;
+                            field.onChange(newVariants);
+                          }}
+                          value={variant.sizeId}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                defaultValue={variant.sizeId}
+                                placeholder="Select a size"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {sizes.map((size) => (
+                              <SelectItem key={size.id} value={size.name}>
+                                {size.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+
+                      <FormItem>
+                        <FormLabel>In Stock</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            disabled={loading}
+                            placeholder="0"
+                            value={variant.inStock}
+                            onChange={(e) => {
+                              const newVariants = [...variants];
+                              if (newVariants[index]) {
+                                newVariants[index].inStock = Number(
+                                  e.target.value
+                                );
+                                field.onChange(newVariants);
+                              }
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+
+                      <FormItem>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => {
+                            const newVariants = variants.filter(
+                              (_, variantIndex) => variantIndex !== index
+                            );
+                            field.onChange(newVariants);
+                          }}
+                          disabled={loading}
+                        >
+                          <Trash className="w-4 h-4" />
+                        </Button>
+                      </FormItem>
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+
+            {/* Add variant button */}
+            <FormItem>
+              <Button
+                onClick={() =>
+                  form.setValue("variants", [
+                    ...form.watch("variants"),
+                    {
+                      colorId: "default",
+                      sizeId: "default",
+                      inStock: 1,
+                    },
+                  ])
+                }
+              >
+                Add variant
+              </Button>
+            </FormItem>
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

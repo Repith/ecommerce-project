@@ -56,7 +56,7 @@ model Size {
   store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
   name      String
   value     String
-  products  Product[]
+  variants  Variant[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -69,7 +69,7 @@ model Color {
   store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
   name      String
   value     String
-  products  Product[]
+  variants  Variant[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -87,18 +87,29 @@ model Product {
   isFeatured  Boolean     @default(false)
   isArchived  Boolean     @default(false)
   description String
-  sizeId      String
-  size        Size        @relation(fields: [sizeId], references: [id])
-  colorId     String
-  color       Color       @relation(fields: [colorId], references: [id])
-  orderItems  OrderItem[]
+  variants    Variant[]
   images      Image[]
-  inStock     Int         @default(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  OrderItem   OrderItem[]
 
   @@index([storeId])
   @@index([categoryId])
+}
+
+model Variant {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sizeId    String?
+  size      Size?    @relation(fields: [sizeId], references: [id])
+  colorId   String?
+  color     Color?   @relation(fields: [colorId], references: [id])
+  inStock   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
   @@index([sizeId])
   @@index([colorId])
 }
