@@ -1,11 +1,9 @@
 [ADMIN]
-- connected all routes from chekout and webhook to Stripe payments
-- manage error handling in there are not enough products in store (toast message of what item is missing)
+- redisigned UI
+    - added left side navbar
+    - added lucid-react icons
+    - created new layout for product-form
+- fixed add variant to product
+- added react-color and color-picker into Color Value Input 
+
 [STORE]
-- redisigned cart-item tab and cart-item-dialog
-- created  
-- added additionl summary of products to Checkout
-- added className attribute to Currency
-- implemented skeleton loading for products
-- created new gallery and adapted it to modal-dialog
-- changed billboard in categories

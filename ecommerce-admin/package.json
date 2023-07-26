@@ -42,6 +42,7 @@
     "next-themes": "^0.2.1",
     "postcss": "8.4.25",
     "react": "18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
     "react-hot-toast": "^2.4.1",
@@ -56,6 +57,7 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@types/react-color": "^3.0.6",
     "prisma": "^5.0.0"
   }
 }

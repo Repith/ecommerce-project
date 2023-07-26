@@ -23,7 +23,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const stockCount = await getStockCount(params.storeId);
 
   return (
-    <div className="flex-col">
+    <div className="flex-col ml-56">
       <div className="flex-1 p-8 pt-6 space-y-4">
         <Heading title="Dashboard" description="Overview of your store" />
         <Separator />

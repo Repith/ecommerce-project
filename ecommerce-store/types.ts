@@ -10,31 +10,39 @@ export interface Category {
   billboard: Billboard;
 }
 
+export interface CartItem {
+  product: Product;
+  variant: Variant;
+  quantity: number;
+}
+export interface Variant {
+  id: string;
+  color: string;
+  size: string;
+  inStock: number;
+}
 export interface Product {
   id: string;
   category: Category;
   name: string;
   price: number;
   isFeatured: boolean;
-  size: Size;
-  color: Color;
-  images: Image[]
+  images: Image[];
   description: string;
-  quantity: number;
-  inStock: number;
-};
+  variants: Variant[];
+}
 
 export interface Size {
   id: string;
   name: string;
   value: string;
-};
+}
 
 export interface Color {
   id: string;
   name: string;
   value: string;
-};
+}
 
 export interface Image {
   id: string;

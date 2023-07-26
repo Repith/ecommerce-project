@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Color } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { Palette, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SketchPicker } from "react-color";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,8 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [color, setColor] = useState("Pick a color...");
+  const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
   const title = initialData ? "Edit color" : "Create color";
   const description = initialData ? "Edit color" : "Add a new color";
@@ -54,6 +57,19 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
       name: "",
     },
   });
+
+  const popover: React.CSSProperties = {
+    position: "absolute",
+    zIndex: "2",
+  };
+
+  const cover: React.CSSProperties = {
+    position: "fixed",
+    top: "0px",
+    right: "0px",
+    bottom: "0px",
+    left: "0px",
+  };
 
   const onSubmit = async (data: ColorFormValues) => {
     try {
@@ -118,7 +134,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-4 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -142,13 +158,34 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Value</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Color value"
-                      {...field}
-                    />
-                  </FormControl>
+                  <div>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        placeholder="Color value"
+                        {...field}
+                        value={color}
+                        onClick={() =>
+                          setDisplayColorPicker(!displayColorPicker)
+                        }
+                      />
+                    </FormControl>
+                    {displayColorPicker ? (
+                      <div style={popover}>
+                        <div
+                          style={cover}
+                          onClick={() => setDisplayColorPicker(false)}
+                        />
+                        <SketchPicker
+                          color={color}
+                          onChange={(updatedColor) => {
+                            setColor(updatedColor.hex);
+                            form.setValue("value", updatedColor.hex);
+                          }}
+                        />
+                      </div>
+                    ) : null}
+                  </div>{" "}
                   <FormMessage />
                 </FormItem>
               )}
