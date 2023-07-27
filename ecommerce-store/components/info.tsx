@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
 import { Product } from "@/types";
@@ -19,10 +20,29 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data }) => {
   const cart = useCart();
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const colorOptions = Array.from(
+    new Set(data.variants.map((variant) => variant.colorId))
+  );
+
+  const sizeOptions = Array.from(
+    new Set(data.variants.map((variant) => variant.sizeId))
+  );
 
   const onAddToCart = () => {
-    cart.addItem(data);
+    const variantToAdd = data.variants.find(
+      (variant) =>
+        variant.colorId === selectedColor && variant.sizeId === selectedSize
+    );
+    console.log("Data", data.id);
+    console.log("INFO VariantToADD", variantToAdd?.id);
+    if (variantToAdd) {
+      cart.addItem(data.id, variantToAdd.id);
+    }
   };
+
   return (
     <div>
       {/* Name */}
@@ -39,15 +59,37 @@ const Info: React.FC<InfoProps> = ({ data }) => {
       {/* Size and Color */}
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-black">Size:</h3>
-          <div>{data?.size?.name}</div>
-        </div>
-        <div className="flex items-center gap-x-4">
           <h3 className="font-semibold text-black">Color:</h3>
-          <div
-            className="w-6 h-6 border border-gray-600 rounded-full"
-            style={{ backgroundColor: data?.color?.value }}
-          ></div>
+          {colorOptions.map((color, index) => (
+            <Button
+              key={index}
+              onClick={() => setSelectedColor(color)}
+              className={`border-2 p-3 text-xs ${
+                selectedColor === color
+                  ? "border-primary-500 bg-black"
+                  : "border-gray-500 bg-white text-black"
+              }`}
+            >
+              {color}
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-x-4">
+          <h3 className="font-semibold text-black">Size:</h3>
+          {sizeOptions.map((size, index) => (
+            <Button
+              key={index}
+              onClick={() => setSelectedSize(size)}
+              className={`border-2 p-3 text-xs ${
+                selectedSize === size
+                  ? "border-primary-500 bg-black"
+                  : "border-gray-500 bg-white text-black"
+              }`}
+            >
+              {size}
+            </Button>
+          ))}
         </div>
 
         {/* Description */}
@@ -70,7 +112,11 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
         {/* Add to cart */}
         <div className="flex items-center mt-4 gap-x-3">
-          <Button onClick={onAddToCart} className="flex items-center gap-x-2">
+          <Button
+            onClick={onAddToCart}
+            className="flex items-center gap-x-2"
+            disabled={!selectedColor || !selectedSize}
+          >
             Add To Cart
             <ShoppingCart size={20} />
           </Button>

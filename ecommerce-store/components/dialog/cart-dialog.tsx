@@ -4,7 +4,6 @@ import { ShoppingBag, X } from "lucide-react";
 import { Dialog, Transition } from "@headlessui/react";
 
 import { MountedCheck } from "@/lib/mounted-check";
-import { Product } from "@/types";
 import useCart from "@/hooks/use-cart";
 
 import Button from "@/components/ui/button";
@@ -93,7 +92,10 @@ const CartDialog = () => {
                           )}
                           <ul>
                             {cart.items.map((item) => (
-                              <CartItemDialog key={item.id} data={item} />
+                              <CartItemDialog
+                                key={item.product.id}
+                                data={item}
+                              />
                             ))}
                           </ul>
                         </div>

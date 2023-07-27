@@ -5,17 +5,17 @@ import { Trash2 } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
-import { Product } from "@/types";
+import { CartItem } from "@/types";
 
 interface CartItemProps {
-  data: Product;
+  data: CartItem;
 }
 
 const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
   const cart = useCart();
 
   const onRemove = () => {
-    cart.removeItem(data.id);
+    cart.removeItem(data.product.id);
   };
 
   return (

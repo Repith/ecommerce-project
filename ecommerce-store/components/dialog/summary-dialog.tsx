@@ -12,7 +12,7 @@ const DialogSummary = () => {
   const items = useCart((state) => state.items);
 
   const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.price) * item.quantity;
+    return total + Number(item.product.price) * item.quantity;
   }, 0);
 
   return (

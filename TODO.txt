@@ -1,9 +1,4 @@
 [ADMIN]
-- redisigned UI
-    - added left side navbar
-    - added lucid-react icons
-    - created new layout for product-form
-- fixed add variant to product
-- added react-color and color-picker into Color Value Input 
+
 
 [STORE]

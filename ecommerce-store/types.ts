@@ -17,10 +17,11 @@ export interface CartItem {
 }
 export interface Variant {
   id: string;
-  color: string;
-  size: string;
+  colorId: Color;
+  sizeId: Size;
   inStock: number;
 }
+
 export interface Product {
   id: string;
   category: Category;

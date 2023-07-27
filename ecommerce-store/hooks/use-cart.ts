@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import { CartItem } from "@/types";
+import { CartItem, Product, Variant } from "@/types";
 
 interface CartStore {
   items: CartItem[];
-  addItem: (item: CartItem) => void;
+  addItem: (productId: string, variantId: string) => void;
   removeItem: (productId: string, variantId: string) => void;
   removeAll: () => void;
   decreaseItem: (productId: string, variantId: string) => void;
@@ -17,22 +17,22 @@ const useCart = create(
     (set, get) => ({
       items: [],
 
-      addItem: (item: CartItem) => {
+      addItem: (productId: string, variantId: string) => {
         const currentItems = get().items;
-        console.log(item);
-        const existingItemIndex = currentItems.findIndex(
-          (currentItem) =>
-            currentItem.product.id === item.product.id &&
-            currentItem.variant.id === item.variant.id
-        );
+        console.log("Current Items", currentItems);
+        const existingItemIndex =
+          currentItems.findIndex(
+            (currentItem) =>
+              currentItem.product.id === productId &&
+              currentItem.product.variants.map((variant) => variant.id)
+          ) === variantId;
+
+        console.log("Existing Items", existingItemIndex);
 
         if (existingItemIndex !== -1) {
-          if (
-            currentItems[existingItemIndex].quantity + 1 >
-            item.variant.inStock
-          ) {
+          if (currentItems[existingItemIndex].quantity + 1 > variant.inStock) {
             toast.error(
-              `You can't add more of ${item.product.name}. Not enough in stock.`
+              `You can't add more of ${product.name}. Not enough in stock.`
             );
           } else {
             set((state) => {
@@ -48,7 +48,8 @@ const useCart = create(
             items: [
               ...state.items,
               {
-                ...item,
+                product,
+                variant,
                 quantity: 1,
               },
             ],
