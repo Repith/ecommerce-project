@@ -1,4 +1,9 @@
-[ADMIN]
+TODO
 
+
+[ADMIN]
+- adapted webhook and checkout 
 
 [STORE]
+- changed the way of showing variants in ProductPage (size rendered after color pick)
+- changed logic of sending variants to checkout API

@@ -15,15 +15,17 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
   const cart = useCart();
 
   const onRemove = () => {
-    cart.removeItem(data.product.id);
+    cart.removeItem(data.product.id, data.variant.id);
   };
+
+  console.log("DATA", data);
 
   return (
     <li className="flex items-center py-4 border-b">
       <div className="relative w-20 h-20 overflow-hidden rounded-md">
         <Image
           fill
-          src={data.images[0].url}
+          src={data.product.images[0].url}
           alt=""
           className="object-cover object-center"
         />
@@ -35,19 +37,19 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
         <div className="relative pr-9 ">
           <div className="flex justify-between">
             <p className="text-lg font-semibold text-black ">
-              {data.name} (x{data.quantity})
+              {data.product.name} (x{data.quantity})
             </p>
           </div>
 
           <div className="flex mt-1 mb-2 text-sm">
             <p className="text-gray-500">Color</p>
-            <p className="font-semibold">&nbsp;{data.color.name}</p>
+            <p className="font-semibold">&nbsp;{data.variant.colorId.name}</p>
             <p className="pl-4 ml-4 text-gray-500 border-l border-gray-200">
               Size:
             </p>
-            <p className="font-semibold">&nbsp;{data.size.value}</p>
+            <p className="font-semibold">&nbsp;{data.variant.sizeId.name}</p>
           </div>
-          <Currency value={data.price * data.quantity} />
+          <Currency value={data.product.price * data.quantity} />
         </div>
       </div>
     </li>

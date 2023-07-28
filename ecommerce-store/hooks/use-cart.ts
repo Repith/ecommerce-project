@@ -6,7 +6,7 @@ import { CartItem, Product, Variant } from "@/types";
 
 interface CartStore {
   items: CartItem[];
-  addItem: (productId: string, variantId: string) => void;
+  addItem: (data: Product, variant: Variant) => void;
   removeItem: (productId: string, variantId: string) => void;
   removeAll: () => void;
   decreaseItem: (productId: string, variantId: string) => void;
@@ -17,17 +17,14 @@ const useCart = create(
     (set, get) => ({
       items: [],
 
-      addItem: (productId: string, variantId: string) => {
+      addItem: (product: Product, variant: Variant) => {
         const currentItems = get().items;
-        console.log("Current Items", currentItems);
-        const existingItemIndex =
-          currentItems.findIndex(
-            (currentItem) =>
-              currentItem.product.id === productId &&
-              currentItem.product.variants.map((variant) => variant.id)
-          ) === variantId;
 
-        console.log("Existing Items", existingItemIndex);
+        const existingItemIndex = currentItems.findIndex(
+          (currentItem) =>
+            currentItem.product.id === product.id &&
+            currentItem.variant.id === variant.id
+        );
 
         if (existingItemIndex !== -1) {
           if (currentItems[existingItemIndex].quantity + 1 > variant.inStock) {

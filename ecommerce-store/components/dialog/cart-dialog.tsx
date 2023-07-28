@@ -27,6 +27,8 @@ const CartDialog = () => {
     onClose();
   };
 
+  console.log("ITEMS", items);
+
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   return (

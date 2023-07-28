@@ -1,24 +1,24 @@
-import Stripe from "stripe"
-import { headers } from "next/headers"
-import { NextResponse } from "next/server"
+import Stripe from "stripe";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
-import { stripe } from "@/lib/stripe"
-import prismadb from "@/lib/prismadb"
+import { stripe } from "@/lib/stripe";
+import prismadb from "@/lib/prismadb";
 
 export async function POST(req: Request) {
-  const body = await req.text()
-  const signature = headers().get("Stripe-Signature") as string
+  const body = await req.text();
+  const signature = headers().get("Stripe-Signature") as string;
 
-  let event: Stripe.Event
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
-    )
+    );
   } catch (error: any) {
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
@@ -30,12 +30,12 @@ export async function POST(req: Request) {
     address?.city,
     address?.state,
     address?.postal_code,
-    address?.country
+    address?.country,
   ];
 
-  const addressString = addressComponents.filter((c) => c !== null).join(', ');
+  const addressString = addressComponents.filter((c) => c !== null).join(", ");
 
-  console.log('Address constructed:', addressString); // Log 4
+  console.log("Address constructed:", addressString); // Log 4
 
   if (event.type === "checkout.session.completed") {
     try {
@@ -46,37 +46,43 @@ export async function POST(req: Request) {
         data: {
           isPaid: true,
           address: addressString,
-          phone: session?.customer_details?.phone || '',
+          phone: session?.customer_details?.phone || "",
         },
         include: {
           orderItems: true,
-        }
+        },
       });
 
-      const productUpdates = order.orderItems.map(async (orderItem) => {
-        const product = await prismadb.product.findUnique({ where: { id: orderItem.productId } });
-        if (!product) {
-          throw new Error(`Product with id ${orderItem.productId} not found.`);
-        }
-
-        if (product.inStock < orderItem.quantity) {
-          throw new Error(`Not enough ${product.name} in stock.`);
-        }
-
-        const updatedProduct = await prismadb.product.update({
-          where: { id: product.id },
-          data: {
-            inStock: product.inStock - orderItem.quantity,
-            isArchived: product.inStock - orderItem.quantity === 0
-          }
+      const variantUpdates = order.orderItems.map(async (orderItem) => {
+        const variant = await prismadb.variant.findUnique({
+          where: { id: orderItem.variantId },
         });
 
-        return updatedProduct;
+        if (!variant) {
+          throw new Error(`Variant with id ${orderItem.variantId} not found.`);
+        }
+
+        if (variant.inStock < orderItem.quantity) {
+          throw new Error(
+            `Not enough items in stock for variant id ${orderItem.variantId}.`
+          );
+        }
+
+        const updatedVariant = await prismadb.variant.update({
+          where: { id: variant.id },
+          data: {
+            inStock: variant.inStock - orderItem.quantity,
+          },
+        });
+
+        return updatedVariant;
       });
 
-      await Promise.all(productUpdates);
+      await Promise.all(variantUpdates);
     } catch (error: any) {
+      console.error("Error in checkout session:", error);
     }
   }
+
   return new NextResponse(null, { status: 200 });
 }

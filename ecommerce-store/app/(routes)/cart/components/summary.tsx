@@ -26,7 +26,7 @@ const Summary = () => {
   }, [searchParams, removeAll]);
 
   const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.price) * item.quantity;
+    return total + Number(item.product.price) * item.quantity;
   }, 0);
 
   const onCheckout = async () => {
@@ -34,7 +34,10 @@ const Summary = () => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
         {
-          productIds: items.map((item) => item.id),
+          productVariants: items.map((item) => ({
+            productId: item.product.id,
+            variantId: item.variant.id,
+          })),
           quantities: items.map((item) => item.quantity),
         }
       );
@@ -52,14 +55,14 @@ const Summary = () => {
         {items.map((item) => (
           <div
             className="flex items-center justify-between py-2 border-t border-gray-200"
-            key={item.id}
+            key={item.product.id} // Change here
           >
             <div className="text-sm font-light text-gray-800">
-              {item.name} (x {item.quantity})
+              {item.product.name} (x {item.quantity})
             </div>
             <Currency
               className={["font-light", "text-sm"]}
-              value={item.price * item.quantity}
+              value={item.product.price * item.quantity} // Change here
             />
           </div>
         ))}

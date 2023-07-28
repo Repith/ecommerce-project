@@ -5,10 +5,10 @@ import { ChevronDown, ChevronUp, Trash2, X } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
-import { Product } from "@/types";
+import { CartItem } from "@/types";
 
 interface CartItemProps {
-  data: Product;
+  data: CartItem;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
@@ -19,7 +19,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
       <div className="relative w-24 h-24 overflow-hidden rounded-md sm:h-48 sm:w-48">
         <Image
           fill
-          src={data.images[0].url}
+          src={data.product.images[0].url}
           alt=""
           className="object-cover object-center"
         />
@@ -27,22 +27,30 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
       <div className="relative flex flex-col justify-between flex-1 ml-4 sm:ml-6">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-lg font-semibold text-black ">{data.name}</p>
+            <p className="text-lg font-semibold text-black ">
+              {data.product.name}
+            </p>
             <div className="mt-1 mb-2 text-sm ">
               <div className="flex flex-row">
                 <p className="text-gray-500">Color: </p>
-                <p className="font-semibold">&nbsp;{data.color.name}</p>
+                <p className="font-semibold">
+                  &nbsp;{data.variant.colorId.name}
+                </p>{" "}
               </div>
               <div className="flex flex-row">
                 <p className="text-gray-500 ">Size:</p>
-                <p className="font-semibold">&nbsp;{data.size.value}</p>
+                <p className="font-semibold">
+                  &nbsp;{data.variant.sizeId.value}
+                </p>{" "}
               </div>
             </div>
           </div>
           <div>
             <div className="flex items-center gap-x-2">
               <IconButton
-                onClick={() => cart.removeItem(data.id)}
+                onClick={() =>
+                  cart.removeItem(data.product.id, data.variant.id)
+                }
                 icon={<Trash2 size={15} />}
                 aria-label="Remove item"
                 className="ml-4"
@@ -53,19 +61,24 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
         <div className="flex items-end justify-between">
           <div className="flex items-center gap-x-2">
             <IconButton
-              onClick={() => cart.decreaseItem(data.id)}
+              onClick={() =>
+                cart.decreaseItem(data.product.id, data.variant.id)
+              }
               icon={<ChevronDown size={15} />}
               aria-label="Decrease quantity"
             />
             <p className="mx-2">{data.quantity}</p>
 
             <IconButton
-              onClick={() => cart.addItem(data)}
+              onClick={() => cart.addItem(data.product, data.variant)}
               icon={<ChevronUp size={15} />}
               aria-label="Increase quantity"
             />
           </div>
-          <Currency value={data.price * data.quantity} aria-label="Checkout" />
+          <Currency
+            value={data.product.price * data.quantity}
+            aria-label="Checkout"
+          />
         </div>
       </div>
     </li>

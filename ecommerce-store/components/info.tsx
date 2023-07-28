@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
-import { Product } from "@/types";
+import { Color, Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "@/components/ui/button";
 import useCart from "@/hooks/use-cart";
@@ -22,24 +22,35 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   const cart = useCart();
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
+  const [filteredSizeOptions, setFilteredSizeOptions] = useState<string[]>([]);
 
-  const colorOptions = Array.from(
+  const colorOptions: Color[] = Array.from(
     new Set(data.variants.map((variant) => variant.colorId))
   );
 
-  const sizeOptions = Array.from(
-    new Set(data.variants.map((variant) => variant.sizeId))
-  );
+  const onColorSelect = (color: string) => {
+    setSelectedColor(color);
+    const relatedVariants = data.variants.filter(
+      (variant) => variant.colorId === color
+    );
+    const relatedSizes: Size[] = Array.from(
+      new Set(relatedVariants.map((variant) => variant.sizeId))
+    );
+    setFilteredSizeOptions(relatedSizes);
+  };
 
   const onAddToCart = () => {
     const variantToAdd = data.variants.find(
       (variant) =>
         variant.colorId === selectedColor && variant.sizeId === selectedSize
     );
-    console.log("Data", data.id);
-    console.log("INFO VariantToADD", variantToAdd?.id);
+
+    console.log("INFO - Data", data);
+    console.log("INFO - VariantToADD", variantToAdd);
+
     if (variantToAdd) {
-      cart.addItem(data.id, variantToAdd.id);
+      console.log("Selected Variant ID: ", variantToAdd);
+      cart.addItem(data, variantToAdd);
     }
   };
 
@@ -63,7 +74,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           {colorOptions.map((color, index) => (
             <Button
               key={index}
-              onClick={() => setSelectedColor(color)}
+              onClick={() => onColorSelect(color)}
               className={`border-2 p-3 text-xs ${
                 selectedColor === color
                   ? "border-primary-500 bg-black"
@@ -77,7 +88,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
 
         <div className="flex items-center gap-x-4">
           <h3 className="font-semibold text-black">Size:</h3>
-          {sizeOptions.map((size, index) => (
+          {filteredSizeOptions.map((size, index) => (
             <Button
               key={index}
               onClick={() => setSelectedSize(size)}

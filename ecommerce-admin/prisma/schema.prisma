@@ -106,6 +106,8 @@ model Variant {
   colorId   String?
   color     Color?   @relation(fields: [colorId], references: [id])
   inStock   Int      @default(0)
+  orderItem OrderItem[]
+  orderItemId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -145,8 +147,13 @@ model OrderItem {
   orderId   String
   product   Product @relation(fields: [productId], references: [id])
   productId String
+  variant   Variant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  variantId String?
   quantity  Int
 
   @@index([orderId])
   @@index([productId])
+  @@index([variantId])
 }
+
+
