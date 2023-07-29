@@ -16,9 +16,6 @@ module.exports = {
       },
     },
     extend: {
-      // aspectRatio: {
-      //   '4/3': '4 / 3'
-      // },
       keyframes: {
         "accordion-down": {
           from: { height: 0 },

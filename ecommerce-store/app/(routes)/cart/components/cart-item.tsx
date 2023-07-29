@@ -16,6 +16,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
 
   return (
     <li className="flex py-6 border-b">
+      {/* Product info - Image -> Name -> Color -> Size */}
       <div className="relative w-24 h-24 overflow-hidden rounded-md sm:h-48 sm:w-48">
         <Image
           fill
@@ -34,18 +35,19 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
               <div className="flex flex-row">
                 <p className="text-gray-500">Color: </p>
                 <p className="font-semibold">
-                  &nbsp;{data.variant.colorId.name}
+                  &nbsp;{data.variant.colorId}
                 </p>{" "}
               </div>
               <div className="flex flex-row">
                 <p className="text-gray-500 ">Size:</p>
                 <p className="font-semibold">
-                  &nbsp;{data.variant.sizeId.value}
+                  &nbsp;{data.variant.sizeId}
                 </p>{" "}
               </div>
             </div>
           </div>
           <div>
+            {/* Action buttons -> Delete Decrease Add */}
             <div className="flex items-center gap-x-2">
               <IconButton
                 onClick={() =>

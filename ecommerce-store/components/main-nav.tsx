@@ -18,14 +18,16 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
   }));
 
   return (
-    <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
+    <nav className="flex items-center mx-6 space-x-6 lg:space-x-8">
       {routes.map((route) => (
         <Link
           href={route.href}
           key={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-black",
-            route.active ? "text-black" : "text-neutral-500"
+            "text-base font-medium transition-all hover:text-black hover:border-b-4 hover:py-2 ",
+            route.active
+              ? "text-black border-black border-b-4 py-2"
+              : "text-neutral-500"
           )}
         >
           {route.label}

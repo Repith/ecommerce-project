@@ -29,6 +29,7 @@ const Summary = () => {
     return total + Number(item.product.price) * item.quantity;
   }, 0);
 
+  /* Checkout API to backend */
   const onCheckout = async () => {
     try {
       const response = await axios.post(
@@ -50,19 +51,20 @@ const Summary = () => {
 
   return (
     <div className="px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+      {/* Order summary */}
       <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
       <div className="mt-6 ">
         {items.map((item) => (
           <div
             className="flex items-center justify-between py-2 border-t border-gray-200"
-            key={item.product.id} // Change here
+            key={item.product.id}
           >
             <div className="text-sm font-light text-gray-800">
-              {item.product.name} (x {item.quantity})
+              {item.product.name} (x{item.quantity})
             </div>
             <Currency
               className={["font-light", "text-sm"]}
-              value={item.product.price * item.quantity} // Change here
+              value={item.product.price * item.quantity}
             />
           </div>
         ))}

@@ -46,6 +46,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
     "react-hot-toast": "^2.4.1",
+    "react-spinners": "^0.13.8",
     "recharts": "^2.7.2",
     "shadcn-ui": "^0.3.0",
     "stripe": "^12.13.0",

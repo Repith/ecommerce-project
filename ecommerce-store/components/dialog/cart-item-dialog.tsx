@@ -25,7 +25,7 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
       <div className="relative w-20 h-20 overflow-hidden rounded-md">
         <Image
           fill
-          src={data.product.images[0].url}
+          src={data.product.images[0]!.url}
           alt=""
           className="object-cover object-center"
         />
@@ -37,17 +37,21 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
         <div className="relative pr-9 ">
           <div className="flex justify-between">
             <p className="text-lg font-semibold text-black ">
-              {data.product.name} (x{data.quantity})
+              {data.product.name}
             </p>
           </div>
 
-          <div className="flex mt-1 mb-2 text-sm">
+          <div className="flex mt-1 text-sm">
             <p className="text-gray-500">Color</p>
-            <p className="font-semibold">&nbsp;{data.variant.colorId.name}</p>
+            <p className="font-semibold">&nbsp;{data.variant.colorId}</p>
             <p className="pl-4 ml-4 text-gray-500 border-l border-gray-200">
               Size:
             </p>
-            <p className="font-semibold">&nbsp;{data.variant.sizeId.name}</p>
+            <p className="font-semibold">&nbsp;{data.variant.sizeId}</p>
+          </div>
+          <div className="flex mb-2 text-sm">
+            <p className="text-gray-500">Quantity</p>
+            <p className="font-semibold">&nbsp;{data.quantity}</p>
           </div>
           <Currency value={data.product.price * data.quantity} />
         </div>

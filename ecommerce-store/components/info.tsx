@@ -24,7 +24,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [filteredSizeOptions, setFilteredSizeOptions] = useState<string[]>([]);
 
-  const colorOptions: Color[] = Array.from(
+  const colorOptions = Array.from(
     new Set(data.variants.map((variant) => variant.colorId))
   );
 
@@ -33,7 +33,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     const relatedVariants = data.variants.filter(
       (variant) => variant.colorId === color
     );
-    const relatedSizes: Size[] = Array.from(
+    const relatedSizes = Array.from(
       new Set(relatedVariants.map((variant) => variant.sizeId))
     );
     setFilteredSizeOptions(relatedSizes);

@@ -2,8 +2,13 @@ TODO
 
 
 [ADMIN]
-- adapted webhook and checkout 
+- added react-spinners
+- added loading states
+- changed favicon
 
 [STORE]
-- changed the way of showing variants in ProductPage (size rendered after color pick)
-- changed logic of sending variants to checkout API
+- major bug fixes with type Variant/Size/Color
+- logo, cart, categories, footer and other UI changes
+- started searchbar and searchpage
+
+Created sketchy README.md 

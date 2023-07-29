@@ -17,8 +17,8 @@ export interface CartItem {
 }
 export interface Variant {
   id: string;
-  colorId: Color;
-  sizeId: Size;
+  colorId: string;
+  sizeId: string;
   inStock: number;
 }
 
