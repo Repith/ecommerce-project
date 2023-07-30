@@ -22,7 +22,11 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
   const onClick = (id: string) => {
     const current = qs.parse(searchParams.toString());
 
+    console.log("1", current);
+
     let values = (current[valueKey] || "").split(",").filter(Boolean);
+
+    console.log("2", values);
 
     if (values.includes(id)) {
       values = values.filter((value) => value !== id);
@@ -57,6 +61,7 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
       <div className="flex flex-wrap gap-2 ">
         {data.map((filter) => (
           <div key={filter.id} className="flex items-center">
+            {filter.id}
             <Button
               className={cn(
                 "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",

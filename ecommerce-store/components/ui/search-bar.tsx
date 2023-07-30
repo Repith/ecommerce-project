@@ -1,43 +1,48 @@
 "use client";
 
+import { MountedCheck } from "@/lib/mounted-check";
+import { Search } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import qs from "query-string";
 
-import Button from "@/components/ui/button";
-
-const SearchBar: React.FC = () => {
+const SearchInput = () => {
+  const search = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState<string | null>(
+    search ? search.get("q") : ""
+  );
   const router = useRouter();
-  const [query, setQuery] = useState("");
 
-  const onSearch = () => {
-    if (query.length < 3) return;
+  const onSearch = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    const url = qs.stringifyUrl(
-      {
-        url: "/search",
-        query: { q: query },
-      },
-      { skipNull: true }
-    );
+    if (typeof searchQuery !== "string") {
+      return;
+    }
 
-    router.push(url);
+    const encodedSearchQuery = encodeURI(searchQuery);
+    router.push(`/search?q=${encodedSearchQuery}`);
   };
 
   return (
-    <div className="mb-8">
-      <input
-        type="text"
-        className="p-2 text-sm text-gray-800 bg-white border border-gray-300 rounded-md"
-        placeholder="Search for products..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <Button className="ml-2" onClick={onSearch}>
-        Search
-      </Button>
-    </div>
+    <MountedCheck>
+      <form
+        onSubmit={onSearch}
+        className="flex items-center justify-start w-full max-w-md border-b-2 sm:py-3"
+      >
+        <div>
+          <Search size={16} className="pr-1 text-zinc-900" onClick={onSearch} />
+        </div>
+        <div aria-label="Search bar">
+          <input
+            value={searchQuery || ""}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            className="flex w-full text-sm text-zinc-500 placeholder:text-zinc-300 focus:outline-none"
+            placeholder="Search"
+          />
+        </div>
+      </form>
+    </MountedCheck>
   );
 };
 
-export default SearchBar;
+export default SearchInput;

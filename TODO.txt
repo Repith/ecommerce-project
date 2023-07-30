@@ -1,14 +1,14 @@
 TODO
+- pozmienia funkcjonalność zamówień i sposób wyświetlania
+- dodać możliwość sprawdzenia statusu zamówienia po podaniu numeru 
+- obsługa statusu manualna od strony dashboard
+- poprawić działanie filtrów i zrozumieć jak w tym wypadku działa nowy next router
+- zmienić searchbar i ogarnąć searchpage, tak, żeby wyświetlał poszególne produkty
+- dodać notkę i informacje ponad footerem
+- uzupełnić kolekcję o różne produkty
 
 
 [ADMIN]
-- added react-spinners
-- added loading states
-- changed favicon
+
 
 [STORE]
-- major bug fixes with type Variant/Size/Color
-- logo, cart, categories, footer and other UI changes
-- started searchbar and searchpage
-
-Created sketchy README.md 

@@ -4,7 +4,6 @@ import MainNav from "@/components/main-nav";
 import Container from "@/components/ui/container";
 import getCategories from "@/actions/get-categories";
 import NavbarActions from "@/components/navbar-actions";
-import SearchBar from "./ui/search-bar";
 
 const Navbar = async () => {
   const categories = await getCategories();
@@ -20,7 +19,7 @@ const Navbar = async () => {
           </div>
 
           <MainNav data={categories} />
-          <SearchBar />
+
           <NavbarActions />
         </div>
       </Container>

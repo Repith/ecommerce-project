@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
@@ -9,8 +9,9 @@ import { Expand } from "lucide-react";
 import { Product } from "@/types";
 
 import Currency from "@/components/ui/currency";
-import IconButton from "@/components/ui/icon-button";
+
 import usePreviewModal from "@/hooks/use-preview-modal";
+import Button from "./button";
 
 interface ProductCardProps {
   data: Product;
@@ -46,10 +47,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
         />
         <div className="absolute w-full px-6 transition opacity-0 group-hover:opacity-100 bottom-5">
           <div className="flex justify-center gap-x-6">
-            <IconButton
+            <Button
               onClick={onPreview}
-              icon={<Expand size={20} className="text-gray-600" />}
-            />
+              className="py-2 opacity-50 bg-zinc-600 hover:opacity-90"
+            >
+              Quick view
+            </Button>
           </div>
         </div>
       </div>
