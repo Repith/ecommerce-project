@@ -19,19 +19,15 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
 
   const selectedValues = searchParams.get(valueKey)?.split(",") || [];
 
-  const onClick = (id: string) => {
+  const onClick = (name: string) => {
     const current = qs.parse(searchParams.toString());
-
-    console.log("1", current);
 
     let values = (current[valueKey] || "").split(",").filter(Boolean);
 
-    console.log("2", values);
-
-    if (values.includes(id)) {
-      values = values.filter((value) => value !== id);
+    if (values.includes(name)) {
+      values = values.filter((value) => value !== name);
     } else {
-      values.push(id);
+      values.push(name);
     }
 
     const query = {
@@ -60,14 +56,13 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
       <hr className="my-4" />
       <div className="flex flex-wrap gap-2 ">
         {data.map((filter) => (
-          <div key={filter.id} className="flex items-center">
-            {filter.id}
+          <div key={filter.name} className="flex items-center">
             <Button
               className={cn(
                 "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
-                selectedValues.includes(filter.id) && "bg-black text-white"
+                selectedValues.includes(filter.name) && "bg-black text-white"
               )}
-              onClick={() => onClick(filter.id)}
+              onClick={() => onClick(filter.name)}
             >
               {filter.name}
             </Button>

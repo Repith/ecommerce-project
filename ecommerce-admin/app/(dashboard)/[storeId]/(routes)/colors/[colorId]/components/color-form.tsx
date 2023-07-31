@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Color } from "@prisma/client";
-import { Palette, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SketchPicker } from "react-color";

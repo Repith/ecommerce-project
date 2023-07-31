@@ -15,6 +15,7 @@ const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
       orderItems: {
         include: {
           product: true,
+          variant: true,
         },
       },
     },
@@ -29,7 +30,16 @@ const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
     address: item.address,
     products: item.orderItems
       .map((orderItem) => orderItem.product.name)
-      .join(", "),
+      .join(` | `),
+    variants: item.orderItems
+      .map(
+        (orderItem) =>
+          `${orderItem.variant?.colorId} - ${orderItem.variant?.sizeId}`
+      )
+      .join(" | "),
+    quantity: item.orderItems
+      .map((orderItem) => `${orderItem.quantity}`)
+      .join(" | "),
     totalPrice: formatter.format(
       item.orderItems.reduce((total, item) => {
         return total + Number(item.product.price);

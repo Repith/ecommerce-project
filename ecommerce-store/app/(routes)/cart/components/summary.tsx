@@ -59,9 +59,14 @@ const Summary = () => {
             className="flex items-center justify-between py-2 border-t border-gray-200"
             key={item.product.id}
           >
-            <div className="text-sm font-light text-gray-800">
-              {item.product.name} (x{item.quantity})
+            <div className="flex flex-col text-sm font-light titems-center">
+              <span className="font-semibold">{item.product.name}</span>
+              <div className="text-xs">
+                {item.variant.colorId} | {item.variant.sizeId} (x{item.quantity}
+                )
+              </div>
             </div>
+
             <Currency
               className={["font-light", "text-sm"]}
               value={item.product.price * item.quantity}

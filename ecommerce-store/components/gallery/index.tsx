@@ -16,6 +16,7 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const nextImage = () => {
     setCurrentIndex((currentIndex + 1) % images.length);
@@ -49,16 +50,23 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
         ))}
       </div>
 
-      <div className="relative w-full max-h-fit aspect-[1/1.3]">
+      <div
+        className="relative w-full max-h-fit aspect-[1/1.3]"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="absolute inset-0">
-          <Button
+          <div
             onClick={prevImage}
             className={cn(
-              "absolute z-10 p-2 transform -translate-y-1/2 opacity-30 top-1/2 left-2 bg-slate-100"
+              "absolute z-10 inset-y-0 left-0 w-1/6 cursor-pointer",
+              isHovered
+                ? "bg-gradient-to-r from-zinc-100 opacity-30"
+                : "bg-gradient-to-r from-zinc-100 opacity-0"
             )}
           >
-            <ChevronLeft color="#737475" className="w-4 h-4" />
-          </Button>
+            <ChevronLeft className="absolute w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" />
+          </div>
           {images.map((image, index) => (
             <div
               key={image.id}
@@ -73,12 +81,28 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
               />
             </div>
           ))}
-          <Button
+          <div
             onClick={nextImage}
-            className="absolute z-10 p-2 transform -translate-y-1/2 opacity-30 top-1/2 right-2 bg-slate-100 "
+            className={cn(
+              "absolute z-10 inset-y-0 right-0 w-1/6 cursor-pointer transition-all",
+              isHovered
+                ? "bg-gradient-to-l from-zinc-100 opacity-30"
+                : "bg-gradient-to-l from-zinc-100 opacity-0"
+            )}
           >
-            <ChevronRight color="#737475" className="w-4 h-4" />
-          </Button>
+            <ChevronRight className="absolute w-6 h-6 transform -translate-y-1/2 top-1/2 right-1/2" />
+          </div>
+          <div className="absolute inset-x-0 z-10 flex justify-center space-x-2 bottom-4">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "w-2 h-2 rounded-full",
+                  index === currentIndex ? "bg-slate-500" : "bg-slate-200"
+                )}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

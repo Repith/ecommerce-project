@@ -46,17 +46,15 @@ const SearchPage = () => {
     );
   }
 
-  console.log(data);
-
   return (
     <Container>
-      <div className="flex flex-col items-center justify-center py-20">
+      <div className="flex flex-col items-center justify-center py-16">
         {/* Warning */}
         {searchQuery && searchQuery.length < 3 && (
           <div
             className={
               searchQuery.length < 3
-                ? "flex transition-transform justify-center py-4 px-52 rounded-sm mb-4 text-sm text-yellow-500 bg-yellow-100"
+                ? "flex transition-all justify-center py-4 px-52 rounded-sm mb-10 text-sm text-yellow-500 bg-yellow-100"
                 : "hidden"
             }
           >
@@ -64,12 +62,11 @@ const SearchPage = () => {
           </div>
         )}
         {/* Search bar */}
-
         <span className="text-xl ">What are you looking for?</span>
         <SearchBar />
       </div>
       <div className="px-4 lg:px-6 ">
-        {/* Searched products */}
+        {/* Products */}
         {searchQuery && searchQuery.length >= 3 && (
           <>
             <span className="mt-10 text-xl">

@@ -16,7 +16,7 @@ const HomePage = async () => {
         <Billboard data={billboard} additionalProps="transition aspect-[3/1]" />
       </div>
 
-      <div className="flex flex-col px-8 gap-y-8 sm:px-6 lg:px-8">
+      <div className="flex flex-col px-8 pb-8 gap-y-8 sm:px-6 lg:px-8">
         <ProductList title="Featured Products" items={products} />
       </div>
     </Container>

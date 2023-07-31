@@ -1,14 +1,16 @@
 TODO
-- pozmienia funkcjonalność zamówień i sposób wyświetlania
 - dodać możliwość sprawdzenia statusu zamówienia po podaniu numeru 
-- obsługa statusu manualna od strony dashboard
-- poprawić działanie filtrów i zrozumieć jak w tym wypadku działa nowy next router
-- zmienić searchbar i ogarnąć searchpage, tak, żeby wyświetlał poszególne produkty
-- dodać notkę i informacje ponad footerem
 - uzupełnić kolekcję o różne produkty
 
 
 [ADMIN]
-
+- changed product API route
+- changed orders page - added variants and quantity
+- created order API route
+- created order page for each individual order
 
 [STORE]
+- changed filter component to work properly with getProducts API
+- created gallery utilities - dots and navigation arrows
+- minor UI changes
+- created footer-bar

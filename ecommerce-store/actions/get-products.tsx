@@ -13,8 +13,6 @@ interface Query {
 }
 
 const getProducts = async (query: Query): Promise<Product[]> => {
-  console.log("Filter values:", query);
-
   if (!query || Object.keys(query).length === 0) {
     return [];
   }
@@ -29,7 +27,7 @@ const getProducts = async (query: Query): Promise<Product[]> => {
       isFeatured: query.isFeatured,
     },
   });
-  console.log("URL from getProducts", url);
+
   const res = await fetch(url);
 
   return res.json();

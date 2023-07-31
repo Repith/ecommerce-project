@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
 
-import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import FooterBar from "@/components/footer-bar";
+import Footer from "@/components/footer";
 
 import "./globals.css";
 import ModalProvider from "@/providers/modal-provider";
@@ -27,6 +28,7 @@ export default function RootLayout({
         <ToastProvider />
         <Navbar />
         {children}
+        <FooterBar />
         <Footer />
       </body>
     </html>

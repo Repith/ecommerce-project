@@ -19,12 +19,10 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  console.log("1: Checkout POST request has been invoked");
 
   const { productVariants, quantities } = await req.json();
 
   console.log(
-    "2: Received product and variant IDs and quantities:",
     productVariants,
     quantities
   );
@@ -53,9 +51,7 @@ export async function POST(
           product: true,
         },
       });
-
-      console.log("3: Found product and variant in database:", variant);
-
+ 
       if (variant.inStock < quantities[index]) {
         throw new Error(`Not enough ${variant.product.name} in stock.`);
       }
@@ -88,7 +84,6 @@ export async function POST(
               },
             },
             variant: {
-              // Connect to the variant
               connect: {
                 id: pv.variantId,
               },
@@ -114,8 +109,6 @@ export async function POST(
         orderId: order.id,
       },
     });
-
-    console.log("5: Checkout session has been successfully created:", session);
 
     return NextResponse.json(
       { url: session.url },
