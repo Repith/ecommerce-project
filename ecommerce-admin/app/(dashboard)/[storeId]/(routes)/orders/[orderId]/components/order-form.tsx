@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Order, OrderItem } from "@prisma/client";
+import { Order, OrderItem, Product } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,10 +42,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit order" : "Create order";
-  const description = initialData ? "Edit order" : "Add a new order";
+  const title = initialData && "Order details";
+  const description = initialData && "More information about specific order";
   const toastMessage = initialData ? "Order updated." : "Order created.";
-  const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(formSchema),
@@ -91,8 +90,17 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
     }
   };
 
+  //TODO: - function that fetch data for a dedicated product and variant
+  // const URL = `http://localhost:3000/api/${initialData.storeId}/products`;
+
+  // const getProduct = async (id: string): Promise<Product> => {
+  //   const res = await fetch(`${URL}/${id}`);
+
+  //   return res.json();
+  // };
+
   return (
-    <div>
+    <div className="container px-4 mx-auto">
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -114,15 +122,33 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
       </div>
       <Separator />
 
-      <h3>Order Details</h3>
-      <div>
-        <strong>Phone:</strong> {initialData.phone}
-      </div>
-      <div>
-        <strong>Address:</strong> {initialData.address}
-      </div>
-      <div>
-        <strong>Is Paid:</strong> {initialData.isPaid ? "Yes" : "No"}
+      <h3 className="pt-4 text-xl font-bold">Order ID: {initialData.id}</h3>
+      <div className="p-2 mb-4 overflow-hidden shadow sm:rounded-lg">
+        <div className="mb-2">
+          <strong className="text-gray-700">Phone:</strong> {initialData.phone}
+        </div>
+        <div className="mb-2">
+          <strong className="text-gray-700">Address:</strong>{" "}
+          {initialData.address}
+        </div>
+        <div className="mb-2">
+          <strong className="text-gray-700">Is Paid:</strong>{" "}
+          {initialData.isPaid ? "Yes" : "No"}
+        </div>
+        <div>
+          <strong className="text-gray-700">Variants:</strong>
+          <div className="pl-6">
+            <>
+              {initialData.orderItems.map((variant, i) => (
+                <>
+                  <div key={i} className="mb-1">
+                    {variant.variantId} x {variant.quantity}
+                  </div>
+                </>
+              ))}
+            </>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ export type ProductColumn = {
 export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: () => <div className="text-center">Name</div>,
   },
   {
     accessorKey: "isArchived",

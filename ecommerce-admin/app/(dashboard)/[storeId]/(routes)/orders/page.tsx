@@ -28,18 +28,18 @@ const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
     id: item.id,
     phone: item.phone,
     address: item.address,
-    products: item.orderItems
-      .map((orderItem) => orderItem.product.name)
-      .join(` | `),
-    variants: item.orderItems
-      .map(
+    products: JSON.stringify(
+      item.orderItems.map((orderItem) => orderItem.product.name)
+    ),
+    variants: JSON.stringify(
+      item.orderItems.map(
         (orderItem) =>
           `${orderItem.variant?.colorId} - ${orderItem.variant?.sizeId}`
       )
-      .join(" | "),
-    quantity: item.orderItems
-      .map((orderItem) => `${orderItem.quantity}`)
-      .join(" | "),
+    ),
+    quantity: JSON.stringify(
+      item.orderItems.map((orderItem) => `${orderItem.quantity}`)
+    ),
     totalPrice: formatter.format(
       item.orderItems.reduce((total, item) => {
         return total + Number(item.product.price);
