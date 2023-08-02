@@ -12,12 +12,7 @@ export async function POST(
 
     const body = await req.json();
 
-    const {
-     isPaid,
-     phone,
-     address,
-     orderItems
-    } = body;
+    const { isPaid, isSent, phone, address, orderItems } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -25,6 +20,12 @@ export async function POST(
 
     if (!isPaid) {
       return new NextResponse("Payment check is required", { status: 400 });
+    }
+
+    if (!isPaid) {
+      return new NextResponse("Mark if an order is sent or not", {
+        status: 400,
+      });
     }
 
     if (!phone) {
@@ -36,7 +37,9 @@ export async function POST(
     }
 
     if (!orderItems) {
-      return new NextResponse("Need at least 1 order of a product", { status: 400 });
+      return new NextResponse("Need at least 1 order of a product", {
+        status: 400,
+      });
     }
 
     if (!params.storeId) {
@@ -57,13 +60,22 @@ export async function POST(
     const order = await prismadb.order.create({
       data: {
         isPaid,
+        isSent,
         phone,
         address,
         storeId: params.storeId,
         orderItems: {
           createMany: {
-            data: [...orderItems.map((orderItem: {quantity: number, variant: string, product: string}) => orderItem)]
-          }
+            data: [
+              ...orderItems.map(
+                (orderItem: {
+                  quantity: number;
+                  variant: string;
+                  product: string;
+                }) => orderItem
+              ),
+            ],
+          },
         },
       },
     });

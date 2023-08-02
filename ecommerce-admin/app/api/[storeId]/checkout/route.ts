@@ -19,13 +19,9 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-
   const { productVariants, quantities } = await req.json();
 
-  console.log(
-    productVariants,
-    quantities
-  );
+  console.log(productVariants, quantities);
 
   if (!productVariants || productVariants.length === 0) {
     return new NextResponse("Product and Variant IDs are required", {
@@ -51,7 +47,7 @@ export async function POST(
           product: true,
         },
       });
- 
+
       if (variant.inStock < quantities[index]) {
         throw new Error(`Not enough ${variant.product.name} in stock.`);
       }

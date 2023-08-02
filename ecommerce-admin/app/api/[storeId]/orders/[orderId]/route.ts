@@ -37,12 +37,7 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const {
-      isPaid,
-      phone,
-      address,
-      orderItems
-    } = body;
+    const { isPaid, isSent, phone, address, orderItems } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -61,7 +56,9 @@ export async function PATCH(
     }
 
     if (!orderItems) {
-      return new NextResponse("Need at least 1 order of a product", { status: 400 });
+      return new NextResponse("Need at least 1 order of a product", {
+        status: 400,
+      });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -81,10 +78,11 @@ export async function PATCH(
       },
       data: {
         isPaid,
+        isSent,
         phone,
         address,
         orderItems: {
-          deleteMany: {}
+          deleteMany: {},
         },
       },
     });
@@ -96,8 +94,16 @@ export async function PATCH(
       data: {
         orderItems: {
           createMany: {
-            data: [...orderItems.map((orderItem: {quantity: number, variant: string, product: string}) => orderItem)]
-          }
+            data: [
+              ...orderItems.map(
+                (orderItem: {
+                  quantity: number;
+                  variant: string;
+                  product: string;
+                }) => orderItem
+              ),
+            ],
+          },
         },
       },
     });
@@ -153,4 +159,3 @@ export async function DELETE(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
-

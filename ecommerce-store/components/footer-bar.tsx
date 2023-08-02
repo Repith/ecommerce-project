@@ -33,7 +33,9 @@ const FooterBar = async () => {
   const renderLinks = (links: string[]) =>
     links.map((link) => (
       <li key={link}>
-        <Link href={`/${link.toLowerCase().replace(/\s/g, "-")}`}>{link}</Link>
+        {/* FOR SET BY CUSTOMER */}
+        {/* <Link href={`/${link.toLowerCase().replace(/\s/g, "-")}`}>{link}</Link> */}
+        <Link href={`/`}>{link}</Link>
       </li>
     ));
 
@@ -58,9 +60,7 @@ const FooterBar = async () => {
             <ul>
               {categories.map((category) => (
                 <li key={category.id}>
-                  <Link href={`/category/${category.name}`}>
-                    {category.name}
-                  </Link>
+                  <Link href={`/category/${category.id}`}>{category.name}</Link>
                 </li>
               ))}
             </ul>

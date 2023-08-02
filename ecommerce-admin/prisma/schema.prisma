@@ -133,6 +133,7 @@ model Order {
   storeId    String
   orderItems OrderItem[]
   isPaid     Boolean     @default(false)
+  isSent     Boolean     @default(false)
   phone      String      @default("")
   address    String      @default("")
   createdAt  DateTime    @default(now())
