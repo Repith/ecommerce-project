@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Check, MoreHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export type OrderColumn = {
@@ -10,25 +10,13 @@ export type OrderColumn = {
   phone: string;
   address: string;
   isPaid: boolean;
+  isSent: boolean;
   totalPrice: string;
   products: string;
   createdAt: string;
   variants: string;
   quantity: string;
 };
-
-//TODO - for isSent:
-// header: ({ column }) => {
-//   return (
-//     <Button
-//       variant="ghost"
-//       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-//     >
-//       Products
-//       <ArrowUpDown className="w-4 h-4 ml-2" />
-//     </Button>
-//   );
-// },
 
 export const columns: ColumnDef<OrderColumn>[] = [
   {
@@ -90,6 +78,31 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "isPaid",
     header: "Paid",
+    cell: ({ row }) => {
+      return row.getValue("isPaid") ? <Check /> : <X />;
+    },
+  },
+  {
+    accessorKey: "isSent",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
+      );
+    },
+
+    cell: ({ row }) => {
+      return row.getValue("isPaid")
+        ? row.getValue("isSent")
+          ? "Sent"
+          : "Pending"
+        : "Processing";
+    },
   },
   {
     id: "actions",

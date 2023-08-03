@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Send, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -25,8 +25,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
-  console.log(data);
-
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -43,6 +41,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     } finally {
       setLoading(false);
       setOpen(false);
+    }
+  };
+
+  const onSent = async () => {
+    try {
+      setLoading(true);
+      await axios.patch(`/api/${params.storeId}/orders/${data.id}`, {
+        ...data,
+        isSent: true,
+      });
+      router.refresh();
+      toast.success("Order is sent");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +83,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Edit className="w-4 h-4 mr-2" />
             Details
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onSent}>
+            <Send className="w-4 h-4 mr-2" />
+            Mark as sent
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={() => setOpen(true)}>

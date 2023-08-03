@@ -2,15 +2,3 @@ TODO
 - dodać możliwość sprawdzenia statusu zamówienia po podaniu numeru 
 - uzupełnić kolekcję o różne produkty
 
-
-[ADMIN]
-- changed product API route
-- changed orders page - added variants and quantity
-- created order API route
-- created order page for each individual order
-
-[STORE]
-- changed filter component to work properly with getProducts API
-- created gallery utilities - dots and navigation arrows
-- minor UI changes
-- created footer-bar

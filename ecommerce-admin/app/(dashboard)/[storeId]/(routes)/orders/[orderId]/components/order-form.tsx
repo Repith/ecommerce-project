@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Order, OrderItem, Product } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { Send, Trash } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -46,35 +46,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
   const description = initialData && "More information about specific order";
   const toastMessage = initialData ? "Order updated." : "Order created.";
 
-  const form = useForm<OrderFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialData,
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "orderItems",
-  });
-
-  const onSubmit = async (data: OrderFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.storeId}/orders/${params.orderId}`,
-          data
-        );
-      }
-      router.refresh();
-      router.push(`/${params.storeId}/orders`);
-      toast.success(toastMessage);
-    } catch (error) {
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const onDelete = async () => {
     try {
       setLoading(true);
@@ -87,6 +58,29 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
     } finally {
       setLoading(false);
       setOpen(false);
+    }
+  };
+
+  const onSent = async () => {
+    if (!initialData.isSent) {
+      try {
+        setLoading(true);
+        console.log(initialData);
+        await axios.patch(`/api/${params.storeId}/orders/${initialData.id}`, {
+          ...initialData,
+          isSent: true,
+        });
+
+        router.refresh();
+        toast.success("Order is sent");
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      toast.error("Order is already sent");
     }
   };
 
@@ -148,6 +142,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
               ))}
             </>
           </div>
+        </div>
+        <div className="flex justify-between mb-2">
+          <div>
+            <strong className="text-gray-700">Is Sent:</strong>{" "}
+            {initialData.isSent ? "Yes" : "No"}
+          </div>
+          <Button onClick={onSent} className="py-1">
+            Mark as sent <Send className="pl-1" />
+          </Button>
         </div>
       </div>
     </div>

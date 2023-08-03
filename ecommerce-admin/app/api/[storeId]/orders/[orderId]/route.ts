@@ -43,22 +43,16 @@ export async function PATCH(
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!isPaid) {
+    if (isPaid === undefined) {
       return new NextResponse("Payment check is required", { status: 400 });
     }
 
-    if (!phone) {
+    if (phone && !phone) {
       return new NextResponse("Phone number is required", { status: 400 });
     }
 
-    if (!address) {
-      return new NextResponse("Adress  is required", { status: 400 });
-    }
-
-    if (!orderItems) {
-      return new NextResponse("Need at least 1 order of a product", {
-        status: 400,
-      });
+    if (address && !address) {
+      return new NextResponse("Address is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -72,40 +66,34 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    await prismadb.order.update({
-      where: {
-        id: params.orderId,
-      },
-      data: {
-        isPaid,
-        isSent,
-        phone,
-        address,
-        orderItems: {
-          deleteMany: {},
-        },
-      },
-    });
+    const updateData = {
+      isPaid,
+      isSent,
+      ...(phone && { phone }),
+      ...(address && { address }),
+    };
+
+    if (orderItems) {
+      if (!orderItems.length) {
+        return new NextResponse("Need at least 1 order of a product", {
+          status: 400,
+        });
+      }
+
+      updateData.orderItems = {
+        deleteMany: {},
+        createMany: orderItems.map(
+          (orderItem: { quantity: number; variant: string; product: string }) =>
+            orderItem
+        ),
+      };
+    }
 
     const order = await prismadb.order.update({
       where: {
         id: params.orderId,
       },
-      data: {
-        orderItems: {
-          createMany: {
-            data: [
-              ...orderItems.map(
-                (orderItem: {
-                  quantity: number;
-                  variant: string;
-                  product: string;
-                }) => orderItem
-              ),
-            ],
-          },
-        },
-      },
+      data: updateData,
     });
 
     return NextResponse.json(order);

@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Category, Color, Image, Product, Size, Variant } from "@prisma/client";
 import { Trash } from "lucide-react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import ImageUpload from "@/components/ui/image-upload";
