@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Color, Size } from "@/types";
+import ColorEffect from "@/components/ui/color-effect";
 
 interface FilterProps {
   data: (Size | Color)[];
@@ -52,7 +53,9 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
 
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold">{name}</h3>
+      <h3 className="text-lg font-semibold">
+        <ColorEffect>{name}</ColorEffect>
+      </h3>
       <hr className="my-4" />
       <div className="flex flex-wrap gap-2 ">
         {data.map((filter) => (
@@ -60,7 +63,7 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
             <Button
               className={cn(
                 "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
-                selectedValues.includes(filter.name) && "bg-black text-white"
+                selectedValues.includes(filter.name) && "bg-accent text-white"
               )}
               onClick={() => onClick(filter.name)}
             >

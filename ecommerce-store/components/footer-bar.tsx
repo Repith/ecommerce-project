@@ -40,23 +40,31 @@ const FooterBar = async () => {
     ));
 
   return (
-    <div className="px-10 py-10 border-t-2 ">
+    <div className="px-10 py-10 border-t-2 border-accent/10 ">
       <Container>
         <div className="grid grid-cols-4 ">
           <nav>
-            <h4 className="pb-2">HELP</h4>
+            <h4 className="pb-2">
+              <span className="border-b-4 border-accent">HELP</span>
+            </h4>
             <ul>{renderLinks(helpLinks)}</ul>
           </nav>
           <nav>
-            <h4 className="pb-2">ABOUT US</h4>
+            <h4 className="pb-2">
+              <span className="border-b-4 border-accent">ABOUT US</span>
+            </h4>
             <ul>{renderLinks(aboutLinks)}</ul>
           </nav>
           <nav>
-            <h4 className="pb-2">TERMS</h4>
+            <h4 className="pb-2">
+              <span className="border-b-4 border-accent">TERMS</span>
+            </h4>
             <ul>{renderLinks(termsLinks)}</ul>
           </nav>
           <nav>
-            <h4 className="pb-2">BUY ONLINE</h4>
+            <h4 className="pb-2">
+              <span className="border-b-4 border-accent">BUY ONLINE</span>
+            </h4>
             <ul>
               {categories.map((category) => (
                 <li key={category.id}>

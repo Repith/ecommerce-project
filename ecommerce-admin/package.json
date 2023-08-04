@@ -60,6 +60,6 @@
   },
   "devDependencies": {
     "@types/react-color": "^3.0.6",
-    "prisma": "^5.0.0"
+    "prisma": "^5.1.1"
   }
 }

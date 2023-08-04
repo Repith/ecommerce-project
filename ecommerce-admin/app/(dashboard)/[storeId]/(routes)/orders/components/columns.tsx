@@ -2,8 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { ArrowUpDown, Check, MoreHorizontal, X } from "lucide-react";
+import { ArrowUpDown, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export type OrderColumn = {
   id: string;
@@ -97,11 +98,15 @@ export const columns: ColumnDef<OrderColumn>[] = [
     },
 
     cell: ({ row }) => {
-      return row.getValue("isPaid")
-        ? row.getValue("isSent")
-          ? "Sent"
-          : "Pending"
-        : "Processing";
+      return row.getValue("isPaid") ? (
+        row.getValue("isSent") ? (
+          <Badge variant="success">Sent</Badge>
+        ) : (
+          <Badge variant="warning">Pending</Badge>
+        )
+      ) : (
+        <Badge variant="destructive">Processing</Badge>
+      );
     },
   },
   {

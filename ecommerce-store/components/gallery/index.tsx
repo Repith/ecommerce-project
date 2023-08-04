@@ -92,13 +92,15 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
           >
             <ChevronRight className="absolute w-6 h-6 transform -translate-y-1/2 top-1/2 right-1/2" />
           </div>
-          <div className="absolute inset-x-0 z-10 flex justify-center space-x-2 bottom-4">
+          <div className="absolute inset-x-0 z-10 flex items-center justify-center space-x-2 bottom-4">
             {images.map((_, index) => (
               <div
                 key={index}
                 className={cn(
-                  "w-2 h-2 rounded-full",
-                  index === currentIndex ? "bg-slate-500" : "bg-slate-200"
+                  "w-2 h-2 rounded-full ",
+                  index === currentIndex
+                    ? "bg-accent w-3 h-3 shadow-md"
+                    : "bg-slate-100"
                 )}
               />
             ))}

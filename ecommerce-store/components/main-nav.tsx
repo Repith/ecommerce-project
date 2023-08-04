@@ -26,7 +26,7 @@ const MainNav: React.FC<MainNavProps> = ({ data }) => {
           className={cn(
             "text-base font-medium transition-all hover:text-black hover:border-b-4 hover:border-[#f9dee8] hover:py-2 ",
             route.active
-              ? "text-black border-[#d41d6d] border-b-4 py-2"
+              ? "text-black border-accent border-b-4 py-2"
               : "text-neutral-500"
           )}
         >

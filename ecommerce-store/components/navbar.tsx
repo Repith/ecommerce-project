@@ -9,7 +9,7 @@ const Navbar = async () => {
   const categories = await getCategories();
 
   return (
-    <div className="sticky top-0 z-10 py-4 bg-white border-b-2">
+    <div className="sticky top-0 z-10 py-4 bg-white border-b-2 shadow-md border-accent/10 shadow-accent/5">
       <Container>
         <div className="relative flex items-center h-16 px-4 sm:px-6">
           <div className="px-3 py-2 text-xl font-bold text-white rounded-l-md bg-stone-950">
