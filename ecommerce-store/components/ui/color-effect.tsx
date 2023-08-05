@@ -1,5 +1,5 @@
 interface CollorEffectProps {
-  children: string;
+  children: string | undefined;
 }
 
 const ColorEffect: React.FC<CollorEffectProps> = ({ children }) => {

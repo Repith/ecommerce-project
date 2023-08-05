@@ -55,20 +55,20 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   };
 
   return (
-    <div>
+    <nav>
       {/* Name */}
       <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
 
       {/* Price */}
-      <div className="flex items-end justify-between mt-3">
+      <section className="flex items-end justify-between mt-3">
         <p className="text-2xl text-gray-900">
           <Currency value={data.price} />
         </p>
-      </div>
+      </section>
       <hr className="my-4" />
 
       {/* Size and Color */}
-      <div className="flex flex-col gap-y-4">
+      <section className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-4">
           <h3 className="font-semibold text-black">Color:</h3>
           {colorOptions.map((color, index) => (
@@ -94,7 +94,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
               onClick={() => setSelectedSize(size)}
               className={`border-2 p-3 text-xs ${
                 selectedSize === size
-                  ? "border-primary-500 bg-black"
+                  ? "border-primary-500 "
                   : "border-gray-500 bg-white text-black"
               }`}
             >
@@ -125,15 +125,15 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         <div className="flex items-center mt-4 gap-x-3">
           <Button
             onClick={onAddToCart}
-            className="flex items-center gap-x-2"
+            className="flex items-center gap-x-2 bg-accent"
             disabled={!selectedColor || !selectedSize}
           >
             Add To Cart
             <ShoppingCart size={20} />
           </Button>
         </div>
-      </div>
-    </div>
+      </section>
+    </nav>
   );
 };
 

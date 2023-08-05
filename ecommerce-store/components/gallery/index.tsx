@@ -28,12 +28,12 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
 
   return (
     <div className="flex gap-x-4">
-      <div className="flex-col items-center justify-between hidden w-1/4 h-full sm:flex">
+      <div className="flex-col items-center justify-between hidden w-1/6 h-full sm:flex">
         {images.map((image, index) => (
           <div
             key={image.id}
             className={cn(
-              `relative w-full h-28 mb-4 overflow-hidden cursor-pointer ${
+              `relative w-full h-24 mb-2 overflow-hidden cursor-pointer ${
                 index === currentIndex ? "ring-2 ring-slate-500" : ""
               }`,
               additionalClass
@@ -107,6 +107,7 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], additionalClass }) => {
           </div>
         </div>
       </div>
+      <div className="hidden w-1/6 md:flex"></div>
     </div>
   );
 };

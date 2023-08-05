@@ -1,4 +1,4 @@
 TODO
-- dodać możliwość sprawdzenia statusu zamówienia po podaniu numeru 
+- dodać możliwość sprawdzenia statusu zamówienia po podaniu numeru
 - uzupełnić kolekcję o różne produkty
 

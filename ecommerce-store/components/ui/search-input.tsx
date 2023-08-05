@@ -24,7 +24,7 @@ const SearchInput = () => {
     <MountedCheck>
       <form
         onSubmit={onSearch}
-        className="flex items-center justify-start w-full max-w-md border-b-2 border-accent/50 sm:py-3"
+        className="flex items-center justify-start w-full max-w-lg py-1 border-b-2 border-accent/50 sm:py-3"
       >
         <input
           value={searchQuery || ""}

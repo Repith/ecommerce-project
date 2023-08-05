@@ -1,16 +1,17 @@
 "use client";
 
-import SearchBar from "@/components/ui/search-bar";
 import React from "react";
-import getProducts from "@/actions/get-products";
-import ProductCard from "@/components/ui/product-card";
-import { Product } from "@/types";
-import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
+import { useSearchParams } from "next/navigation";
+
+import { Product } from "@/types";
+import getProducts from "@/actions/get-products";
+
+import SearchBar from "@/components/ui/search-input";
+import ProductCard from "@/components/ui/product-card";
 import NoResults from "@/components/ui/no-results";
 import Container from "@/components/ui/container";
 import { Loader } from "@/components/ui/loader";
-import { cn } from "@/lib/utils";
 
 const SearchPage = () => {
   const search = useSearchParams();
@@ -53,8 +54,8 @@ const SearchPage = () => {
         {searchQuery && searchQuery.length < 3 && (
           <div
             className={
-              searchQuery.length < 3
-                ? "flex transition-all justify-center py-4 px-52 rounded-sm mb-10 text-sm text-yellow-500 bg-yellow-100"
+              searchQuery && searchQuery.length < 3
+                ? "flex transition-all justify-center  py-4 px-52 rounded-sm mb-10 font-medium text-md text-yellow-500 bg-yellow-100 shadow-md shadow-zinc-100"
                 : "hidden"
             }
           >
@@ -65,8 +66,9 @@ const SearchPage = () => {
         <span className="text-xl ">What are you looking for?</span>
         <SearchBar />
       </div>
-      <div className="px-4 lg:px-6 ">
+      <div className="px-4 pb-4 lg:px-6 lg:pb-8 ">
         {/* Products */}
+        {!searchQuery && <div className="pb-14"></div>}
         {searchQuery && searchQuery.length >= 3 && (
           <>
             <span className="mt-10 text-xl">

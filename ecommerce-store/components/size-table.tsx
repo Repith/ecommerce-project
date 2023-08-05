@@ -10,7 +10,7 @@ import {
 
 const SizeTable = () => {
   return (
-    <div>
+    <section>
       <Table>
         <TableCaption>Women size chart</TableCaption>
         <TableHeader className="col-auto">
@@ -58,7 +58,7 @@ const SizeTable = () => {
           </TableRow>
         </TableBody>
       </Table>
-    </div>
+    </section>
   );
 };
 

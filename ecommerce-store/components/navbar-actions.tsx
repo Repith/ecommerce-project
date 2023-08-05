@@ -1,24 +1,46 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
+import { useState } from "react";
 import { MountedCheck } from "@/lib/mounted-check";
-import useCart from "@/hooks/use-cart";
 
-import SearchBar from "@/components/ui/search-bar";
+import { Search, X } from "lucide-react";
 
+import SearchInput from "@/components/ui/search-input";
 import CartDialog from "@/components/dialog/cart-dialog";
 
 const NavbarActions = () => {
-  const cart = useCart();
-  const router = useRouter();
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   return (
     <MountedCheck>
-      <div className="flex items-center justify-between ml-auto gap-x-2">
-        <SearchBar />
+      <nav className="flex items-center justify-end ml-auto transition-all gap-x-2">
+        <div className="hidden w-56 md:flex">
+          <SearchInput />
+        </div>
+        <div
+          className={
+            isSearchActive ? "transition-all w-56" : "w-0 overflow-hidden"
+          }
+        >
+          <SearchInput />
+        </div>
+        {isSearchActive ? (
+          <button
+            onClick={() => setIsSearchActive(false)}
+            className="transition-all md:hidden"
+          >
+            <X size={20} />
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsSearchActive(true)}
+            className="transition-all md:hidden"
+          >
+            <Search size={20} />
+          </button>
+        )}
         <CartDialog />
-      </div>
+      </nav>
     </MountedCheck>
   );
 };

@@ -1,28 +1,34 @@
 import { cn } from "@/lib/utils";
 import { Billboard } from "@/types";
+import ColorEffect from "./ui/color-effect";
 
 interface BillboardProps {
   data?: Billboard;
   additionalProps?: string;
+  rounded: string;
 }
 
-const Billboard: React.FC<BillboardProps> = ({ data, additionalProps }) => {
+const Billboard: React.FC<BillboardProps> = ({
+  data,
+  additionalProps,
+  rounded,
+}) => {
   return (
-    <div className="p-4 overflow-hidden sm:p-6 rounded-xl">
+    <section className={cn("overflow-hidden shadow-md", rounded)}>
       <div
         className={cn(
-          "rounded-xl relative aspect-[3/1] overflow-hidden bg-cover",
+          "relative aspect-[3/1] overflow-hidden bg-cover",
           additionalProps
         )}
         style={{ backgroundImage: `url(${data?.imageUrl})` }}
       >
         <div className="flex flex-col items-center justify-center w-full h-full text-center gap-y-8">
           <div className="max-w-xs text-3xl font-bold sm:text-5xl lg:text-6xl sm:max-w-xl">
-            {data?.label}
+            <ColorEffect>{data?.label}</ColorEffect>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

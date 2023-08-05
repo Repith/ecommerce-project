@@ -18,8 +18,6 @@ const CartItemDialog: React.FC<CartItemProps> = ({ data }) => {
     cart.removeItem(data.product.id, data.variant.id);
   };
 
-  console.log("DATA", data);
-
   return (
     <li className="flex items-center py-4 border-b">
       <div className="relative w-20 h-20 overflow-hidden rounded-md">
