@@ -9,6 +9,8 @@ import { getSalesCount } from "@/actions/get-sales-count";
 import { getGraphRevenue } from "@/actions/get-graph-revenue";
 import { getStockCount } from "@/actions/get-stock-count";
 import { formatter } from "@/lib/utils";
+import { getRecentOrders } from "@/actions/get-recent-orders";
+import RecentOrders from "@/components/recent-orders";
 
 interface DashboardPageProps {
   params: {
@@ -21,6 +23,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const graphRevenue = await getGraphRevenue(params.storeId);
   const salesCount = await getSalesCount(params.storeId);
   const stockCount = await getStockCount(params.storeId);
+  const recentOrders = await getRecentOrders(params.storeId);
+
+  console.log(recentOrders);
 
   return (
     <div className="flex-col ml-56">
@@ -62,14 +67,24 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             </CardContent>
           </Card>
         </div>
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Overview</CardTitle>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <Overview data={graphRevenue} />
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-3 space-x-4">
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Recent Orders</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <RecentOrders data={recentOrders} />
+            </CardContent>
+          </Card>
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <Overview data={graphRevenue} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

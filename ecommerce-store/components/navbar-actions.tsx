@@ -27,16 +27,16 @@ const NavbarActions = () => {
         {isSearchActive ? (
           <button
             onClick={() => setIsSearchActive(false)}
-            className="transition-all md:hidden"
+            className="md:hidden"
           >
             <X size={20} />
           </button>
         ) : (
           <button
             onClick={() => setIsSearchActive(true)}
-            className="transition-all md:hidden"
+            className="transition-all md:hidden "
           >
-            <Search size={20} />
+            <Search size={20} color="#d41d6d" />
           </button>
         )}
         <CartDialog />
