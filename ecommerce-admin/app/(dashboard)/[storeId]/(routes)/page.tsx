@@ -25,8 +25,6 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const stockCount = await getStockCount(params.storeId);
   const recentOrders = await getRecentOrders(params.storeId);
 
-  console.log(recentOrders);
-
   return (
     <div className="flex-col ml-56">
       <div className="flex-1 p-8 pt-6 space-y-4">
