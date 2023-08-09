@@ -108,7 +108,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         onConfirm={onDelete}
         loading={loading}
       />
-      <div className="flex items-center justify-between">
+      <section className="flex items-center justify-between">
         <Heading title={title} description={description}></Heading>
         {initialData && (
           <Button
@@ -120,7 +120,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             <Trash className="w-4 h-4" />
           </Button>
         )}
-      </div>
+      </section>
       <Separator />
       <Form {...form}>
         <form
@@ -145,7 +145,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-3 gap-8">
+          <section className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
               name="label"
@@ -163,7 +163,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 </FormItem>
               )}
             />
-          </div>
+          </section>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>

@@ -26,11 +26,11 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const recentOrders = await getRecentOrders(params.storeId);
 
   return (
-    <div className="flex-col ml-56">
-      <div className="flex-1 p-8 pt-6 space-y-4">
+    <main className="flex-col ml-56">
+      <nav className="flex-1 p-8 pt-6 space-y-4">
         <Heading title="Dashboard" description="Overview of your store" />
         <Separator />
-        <div className="grid grid-cols-3 gap-4">
+        <section className="grid grid-cols-3 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
@@ -64,8 +64,8 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               <div className="text-2xl font-bold">{stockCount}</div>
             </CardContent>
           </Card>
-        </div>
-        <div className="grid grid-cols-3 space-x-4">
+        </section>
+        <section className="grid grid-cols-3 space-x-4">
           <Card className="col-span-1">
             <CardHeader>
               <CardTitle>Recent Orders</CardTitle>
@@ -82,9 +82,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               <Overview data={graphRevenue} />
             </CardContent>
           </Card>
-        </div>
-      </div>
-    </div>
+        </section>
+      </nav>
+    </main>
   );
 };
 

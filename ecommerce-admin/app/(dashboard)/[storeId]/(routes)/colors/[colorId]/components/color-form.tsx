@@ -115,7 +115,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
         onConfirm={onDelete}
         loading={loading}
       />
-      <div className="flex items-center justify-between">
+      <nav className="flex items-center justify-between">
         <Heading title={title} description={description}></Heading>
         {initialData && (
           <Button
@@ -127,14 +127,14 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
             <Trash className="w-4 h-4" />
           </Button>
         )}
-      </div>
+      </nav>
       <Separator />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
-          <div className="grid grid-cols-4 gap-8">
+          <section className="grid grid-cols-4 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -158,7 +158,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Value</FormLabel>
-                  <div>
+                  <section>
                     <FormControl>
                       <Input
                         disabled={loading}
@@ -185,12 +185,12 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                         />
                       </div>
                     ) : null}
-                  </div>{" "}
+                  </section>{" "}
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
+          </section>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>

@@ -113,7 +113,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         onConfirm={onDelete}
         loading={loading}
       />
-      <div className="flex items-center justify-between">
+      <nav className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
@@ -125,14 +125,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             <Trash className="w-4 h-4" />
           </Button>
         )}
-      </div>
+      </nav>
       <Separator />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
-          <div className="gap-8 md:grid md:grid-cols-3">
+          <section className="gap-8 md:grid md:grid-cols-3">
             <FormField
               control={form.control}
               name="name"
@@ -182,7 +182,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                 </FormItem>
               )}
             />
-          </div>
+          </section>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>

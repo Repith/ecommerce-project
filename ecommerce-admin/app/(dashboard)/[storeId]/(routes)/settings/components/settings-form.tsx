@@ -85,7 +85,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         onConfirm={onDelete}
         loading={loading}
       />
-      <div className="flex items-center justify-between">
+      <nav className="flex items-center justify-between">
         <Heading
           title="Setings"
           description="Manage store preferences"
@@ -98,14 +98,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         >
           <Trash className="w-4 h-4" />
         </Button>
-      </div>
+      </nav>
       <Separator />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <section className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -123,7 +123,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                 </FormItem>
               )}
             />
-          </div>
+          </section>
           <Button disabled={loading} className="ml-auto" type="submit">
             Save changes
           </Button>
