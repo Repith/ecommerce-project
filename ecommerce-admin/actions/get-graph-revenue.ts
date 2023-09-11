@@ -1,8 +1,8 @@
 import prismadb from "@/lib/prismadb";
 
 interface GraphData {
-  name: string;
-  total: number;
+  name?: string;
+  total?: number;
 }
 
 export const getGraphRevenue = async (
@@ -34,7 +34,8 @@ export const getGraphRevenue = async (
     }
 
     // Adding the revenue for this order to the respective month
-    monthlyRevenue[month] = (monthlyRevenue[month] || 0) + revenueForOrder;
+    monthlyRevenue[month] =
+      (monthlyRevenue[month] || 0) + revenueForOrder;
   }
 
   // Converting the grouped data into the format expected by the graph
@@ -55,7 +56,8 @@ export const getGraphRevenue = async (
 
   // Filling in the revenue data
   for (const month in monthlyRevenue) {
-    graphData[parseInt(month)].total = monthlyRevenue[parseInt(month)];
+    graphData[parseInt(month)].total =
+      monthlyRevenue[parseInt(month)];
   }
 
   return graphData;
