@@ -12,38 +12,55 @@ export async function POST(
 
     const body = await req.json();
 
-    const { isPaid, isSent, phone, address, orderItems } = body;
+    const { isPaid, isSent, phone, address, orderItems } =
+      body;
 
     if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
+      return new NextResponse("Unauthenticated", {
+        status: 403,
+      });
     }
 
     if (!isPaid) {
-      return new NextResponse("Payment check is required", { status: 400 });
-    }
-
-    if (!isPaid) {
-      return new NextResponse("Mark if an order is sent or not", {
+      return new NextResponse("Payment check is required", {
         status: 400,
       });
+    }
+
+    if (!isPaid) {
+      return new NextResponse(
+        "Mark if an order is sent or not",
+        {
+          status: 400,
+        }
+      );
     }
 
     if (!phone) {
-      return new NextResponse("Phone number is required", { status: 400 });
-    }
-
-    if (!address) {
-      return new NextResponse("Adress  is required", { status: 400 });
-    }
-
-    if (!orderItems) {
-      return new NextResponse("Need at least 1 order of a product", {
+      return new NextResponse("Phone number is required", {
         status: 400,
       });
     }
 
+    if (!address) {
+      return new NextResponse("Adress  is required", {
+        status: 400,
+      });
+    }
+
+    if (!orderItems) {
+      return new NextResponse(
+        "Need at least 1 order of a product",
+        {
+          status: 400,
+        }
+      );
+    }
+
     if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
+      return new NextResponse("Store id is required", {
+        status: 400,
+      });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -54,7 +71,9 @@ export async function POST(
     });
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 405 });
+      return new NextResponse("Unauthorized", {
+        status: 405,
+      });
     }
 
     const order = await prismadb.order.create({
@@ -83,7 +102,9 @@ export async function POST(
     return NextResponse.json(order);
   } catch (error) {
     console.log("[ORDER_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse("Internal error", {
+      status: 500,
+    });
   }
 }
 
@@ -93,7 +114,9 @@ export async function GET(
 ) {
   try {
     if (!params.storeId) {
-      return new NextResponse("Store ID is required", { status: 400 });
+      return new NextResponse("Store ID is required", {
+        status: 400,
+      });
     }
 
     const orders = await prismadb.order.findMany({
@@ -108,6 +131,8 @@ export async function GET(
     return NextResponse.json(orders);
   } catch (error) {
     console.log("[ORDERS_GET]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse("Internal error", {
+      status: 500,
+    });
   }
 }

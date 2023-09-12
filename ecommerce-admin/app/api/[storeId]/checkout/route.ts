@@ -4,10 +4,20 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
 
+interface RequestBody {
+  productVariants: {
+    variantId: string;
+    productId: string;
+  }[];
+  quantities: number[];
+}
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Methods":
+    "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization",
   proxy: "baseUrlForTheAPI",
 };
 
@@ -19,52 +29,59 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productVariants, quantities } = await req.json();
-
-  console.log(productVariants, quantities);
+  const { productVariants, quantities } =
+    (await req.json()) as RequestBody;
 
   if (!productVariants || productVariants.length === 0) {
-    return new NextResponse("Product and Variant IDs are required", {
-      status: 400,
-    });
+    return new NextResponse(
+      "Product and Variant IDs are required",
+      {
+        status: 400,
+      }
+    );
   }
 
-  if (!quantities || quantities.length !== productVariants.length) {
-    return new NextResponse("Mismatch in productVariant pairs and quantities", {
-      status: 400,
-    });
+  if (
+    !quantities ||
+    quantities.length !== productVariants.length
+  ) {
+    return new NextResponse(
+      "Mismatch in productVariant pairs and quantities",
+      {
+        status: 400,
+      }
+    );
   }
 
-  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] =
+    [];
 
   try {
-    for (const [index, pv] of productVariants.entries()) {
-      const variant = await prismadb.variant.findUnique({
-        where: {
-          id: pv.variantId,
-        },
-        include: {
-          product: true,
-        },
-      });
+    const orderItems = productVariants.map((pv, index) => {
+      const quantity = quantities[index];
 
-      if (variant.inStock < quantities[index]) {
-        throw new Error(`Not enough ${variant.product.name} in stock.`);
+      if (quantity === undefined) {
+        throw new Error(
+          `Quantity is undefined for productVariant at index ${index}`
+        );
       }
 
-      line_items.push({
-        quantity: quantities[index],
-        price_data: {
-          currency: "USD",
-          product_data: {
-            name: variant.product.name,
+      return {
+        product: {
+          connect: {
+            id: pv.productId,
           },
-          unit_amount: variant.product.price.toNumber() * 100,
         },
-      });
-    }
+        variant: {
+          connect: {
+            id: pv.variantId,
+          },
+        },
+        quantity,
+      };
+    });
 
-    if (line_items.length === 0) {
+    if (orderItems.length === 0) {
       throw new Error("No products available.");
     }
 
@@ -73,24 +90,10 @@ export async function POST(
         storeId: params.storeId,
         isPaid: false,
         orderItems: {
-          create: productVariants.map((pv, index) => ({
-            product: {
-              connect: {
-                id: pv.productId,
-              },
-            },
-            variant: {
-              connect: {
-                id: pv.variantId,
-              },
-            },
-            quantity: quantities[index],
-          })),
+          create: orderItems,
         },
       },
     });
-
-    console.log("4: Order has been successfully created:", order);
 
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -113,6 +116,9 @@ export async function POST(
       }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json(
+      { error: error.message },
+      { status: 400 }
+    );
   }
 }

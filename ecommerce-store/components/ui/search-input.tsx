@@ -1,12 +1,15 @@
 import { MountedCheck } from "@/lib/mounted-check";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useState } from "react";
 
 const SearchInput = () => {
   const search = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState<string | null>(
-    search ? search.get("q") : ""
-  );
+  const [searchQuery, setSearchQuery] = useState<
+    string | null
+  >(search ? search.get("q") : "");
   const router = useRouter();
 
   const onSearch = (event: React.FormEvent) => {
@@ -28,7 +31,9 @@ const SearchInput = () => {
       >
         <input
           value={searchQuery || ""}
-          onChange={(event) => setSearchQuery(event.target.value)}
+          onChange={(event) =>
+            setSearchQuery(event.target.value)
+          }
           className="flex w-full pl-6 text-sm text-accent placeholder:text-accent/60 focus:outline-none"
           placeholder="Search"
           style={{

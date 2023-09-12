@@ -32,7 +32,8 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
-interface StoreSwitcherProps extends PopoverTriggerProps {
+export interface StoreSwitcherProps
+  extends PopoverTriggerProps {
   items: Store[];
 }
 
@@ -55,7 +56,10 @@ export default function StoreSwitcher({
 
   const [open, setOpen] = useState(false);
 
-  const onStoreSelect = (store: { value: string; label: string }) => {
+  const onStoreSelect = (store: {
+    value: string;
+    label: string;
+  }) => {
     setOpen(false);
     router.push(`/${store.value}`);
   };
@@ -69,7 +73,10 @@ export default function StoreSwitcher({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className={cn("w-[200px] justify-between, cursor-pointer", className)}
+          className={cn(
+            "w-[200px] justify-between, cursor-pointer",
+            className
+          )}
         >
           <StoreIcon className="w-4 h-4 mr-2" />
           {currentStore?.label}

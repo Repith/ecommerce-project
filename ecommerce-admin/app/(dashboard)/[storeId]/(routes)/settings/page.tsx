@@ -10,7 +10,9 @@ interface SettingsPageProps {
   };
 }
 
-const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
+const SettingsPage: React.FC<SettingsPageProps> = async ({
+  params,
+}) => {
   const { userId } = auth();
 
   if (!userId) {
@@ -29,7 +31,7 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
   }
 
   return (
-    <main className="flex-col ml-56">
+    <main className="flex-col md:ml-56">
       <section className="flex-1 p-8 pt-6 space-y-4">
         <SettingsForm initialData={store} />
       </section>

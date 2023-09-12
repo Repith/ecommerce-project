@@ -5,7 +5,11 @@ import prismadb from "@/lib/prismadb";
 import { SizesClient } from "./components/client";
 import { SizeColumn } from "./components/columns";
 
-const SizesPage = async ({ params }: { params: { storeId: string } }) => {
+const SizesPage = async ({
+  params,
+}: {
+  params: { storeId: string };
+}) => {
   const sizes = await prismadb.size.findMany({
     where: {
       storeId: params.storeId,
@@ -15,15 +19,17 @@ const SizesPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
-  const formattedSizes: SizeColumn[] = sizes.map((item) => ({
-    id: item.id,
-    name: item.name,
-    value: item.value,
-    createdAt: format(item.createdAt, "MMMM do, yyyy"),
-  }));
+  const formattedSizes: SizeColumn[] = sizes.map(
+    (item) => ({
+      id: item.id,
+      name: item.name,
+      value: item.value,
+      createdAt: format(item.createdAt, "MMMM do, yyyy"),
+    })
+  );
 
   return (
-    <div className="flex-col ml-56">
+    <div className="flex-col md:ml-56">
       <div className="flex-1 p-8 pt-6 space-y-4">
         <SizesClient data={formattedSizes} />
       </div>

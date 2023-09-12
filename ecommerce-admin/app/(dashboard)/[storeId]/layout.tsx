@@ -28,10 +28,16 @@ export default async function DashboardLayout({
     redirect("/");
   }
 
+  const stores = await prismadb.store.findMany({
+    where: {
+      userId,
+    },
+  });
+
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar items={stores} />
         {children}
       </div>
     </>

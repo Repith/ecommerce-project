@@ -1,8 +1,17 @@
-import { CreditCard, DollarSign, Package } from "lucide-react";
+import {
+  CreditCard,
+  DollarSign,
+  Package,
+} from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { Overview } from "@/components/overview";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { getTotalRevenue } from "@/actions/get-total-revenue";
 import { getSalesCount } from "@/actions/get-sales-count";
@@ -18,17 +27,28 @@ interface DashboardPageProps {
   };
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
-  const totalRevenue = await getTotalRevenue(params.storeId);
-  const graphRevenue = await getGraphRevenue(params.storeId);
+const DashboardPage: React.FC<DashboardPageProps> = async ({
+  params,
+}) => {
+  const totalRevenue = await getTotalRevenue(
+    params.storeId
+  );
+  const graphRevenue = await getGraphRevenue(
+    params.storeId
+  );
   const salesCount = await getSalesCount(params.storeId);
   const stockCount = await getStockCount(params.storeId);
-  const recentOrders = await getRecentOrders(params.storeId);
+  const recentOrders = await getRecentOrders(
+    params.storeId
+  );
 
   return (
-    <main className="flex-col ml-56">
+    <main className="flex-col md:ml-56">
       <nav className="flex-1 p-8 pt-6 space-y-4">
-        <Heading title="Dashboard" description="Overview of your store" />
+        <Heading
+          title="Dashboard"
+          description="Overview of your store"
+        />
         <Separator />
         <section className="grid grid-cols-3 gap-4">
           <Card>
@@ -46,11 +66,15 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Sales
+              </CardTitle>
               <CreditCard className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+{salesCount}</div>
+              <div className="text-2xl font-bold">
+                +{salesCount}
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -61,12 +85,14 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               <Package className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stockCount}</div>
+              <div className="text-2xl font-bold">
+                {stockCount}
+              </div>
             </CardContent>
           </Card>
         </section>
-        <section className="grid grid-cols-3 space-x-4">
-          <Card className="col-span-1">
+        <section className="flex flex-col lg:flex-row gap-x-4 gap-y-4">
+          <Card className="flex-col lg:w-2/6 ">
             <CardHeader>
               <CardTitle>Recent Orders</CardTitle>
             </CardHeader>
@@ -74,7 +100,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               <RecentOrders data={recentOrders} />
             </CardContent>
           </Card>
-          <Card className="col-span-2">
+          <Card className="flex-col lg:w-4/6">
             <CardHeader>
               <CardTitle>Overview</CardTitle>
             </CardHeader>

@@ -1,7 +1,12 @@
 "use client";
 
 import axios from "axios";
-import { Copy, Edit, MoreHorizontal, Send, Trash } from "lucide-react";
+import {
+  Edit,
+  MoreHorizontal,
+  Send,
+  Trash,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -21,7 +26,9 @@ interface CellActionProps {
   data: OrderColumn;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+export const CellAction: React.FC<CellActionProps> = ({
+  data,
+}) => {
   const router = useRouter();
   const params = useParams();
 
@@ -31,7 +38,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/orders/${data.id}`);
+      await axios.delete(
+        `/api/${params.storeId}/orders/${data.id}`
+      );
       router.refresh();
       toast.success("Order deleted.");
     } catch (error) {
@@ -47,10 +56,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onSent = async () => {
     try {
       setLoading(true);
-      await axios.patch(`/api/${params.storeId}/orders/${data.id}`, {
-        ...data,
-        isSent: true,
-      });
+      await axios.patch(
+        `/api/${params.storeId}/orders/${data.id}`,
+        {
+          ...data,
+          isSent: true,
+        }
+      );
       router.refresh();
       toast.success("Order is sent");
     } catch (error) {
@@ -79,7 +91,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/orders/${data.id}`)}
+            onClick={() =>
+              router.push(
+                `/${params.storeId}/orders/${data.id}`
+              )
+            }
           >
             <Edit className="w-4 h-4 mr-2" />
             Details

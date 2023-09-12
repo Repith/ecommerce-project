@@ -1,6 +1,11 @@
 import Image from "next/image";
 
-import { ChevronDown, ChevronUp, Trash2, X } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
@@ -51,7 +56,10 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
             <div className="flex items-center gap-x-2">
               <IconButton
                 onClick={() =>
-                  cart.removeItem(data.product.id, data.variant.id)
+                  cart.removeItem(
+                    data.product.id,
+                    data.variant.id
+                  )
                 }
                 icon={<Trash2 size={15} />}
                 aria-label="Remove item"
@@ -64,7 +72,10 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
           <div className="flex items-center gap-x-2">
             <IconButton
               onClick={() =>
-                cart.decreaseItem(data.product.id, data.variant.id)
+                cart.decreaseItem(
+                  data.product.id,
+                  data.variant.id
+                )
               }
               icon={<ChevronDown size={15} />}
               aria-label="Decrease quantity"
@@ -72,7 +83,9 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
             <p className="mx-2">{data.quantity}</p>
 
             <IconButton
-              onClick={() => cart.addItem(data.product, data.variant)}
+              onClick={() =>
+                cart.addItem(data.product, data.variant)
+              }
               icon={<ChevronUp size={15} />}
               aria-label="Increase quantity"
             />

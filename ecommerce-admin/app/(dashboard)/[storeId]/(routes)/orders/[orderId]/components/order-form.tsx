@@ -1,55 +1,51 @@
 "use client";
 
-import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Order, OrderItem, Product } from "@prisma/client";
 import { Send, Trash } from "lucide-react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
+import { OrderColumn } from "../../components/columns";
 
-const orderItemSchema = z.object({
-  productId: z.string().min(1).nullable(),
-  quantity: z.coerce.number().min(1),
-  variant: z.string().min(1).nullable(),
-});
+type Products = {
+  variants: string[];
+  quantity: string[];
+};
 
-const formSchema = z.object({
-  phone: z.string().min(1),
-  address: z.string().min(1),
-  isPaid: z.boolean().default(false).optional(),
-  orderItems: z.array(orderItemSchema),
-});
-
-type OrderFormValues = z.infer<typeof formSchema>;
-
-interface OrderFormProps {
-  initialData: Order & { orderItems: OrderItem[] };
-}
-
-export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
+export const OrderForm: React.FC<{
+  initialData: OrderColumn;
+}> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData && "Order details";
-  const description = initialData && "More information about specific order";
-  const toastMessage = initialData ? "Order updated." : "Order created.";
+  const variants = JSON.parse(
+    initialData.variants
+  ) as string[];
+  const quantity = JSON.parse(
+    initialData.quantity
+  ) as string[];
+
+  const products: Products[] = [
+    {
+      variants,
+      quantity,
+    },
+  ];
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/orders/${params.orderId}`);
+      await axios.delete(
+        `/api/${params.storeId}/orders/${initialData.id}`
+      );
       router.refresh();
       router.push(`/${params.storeId}/orders`);
       toast.success("Order deleted.");
@@ -65,12 +61,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
     if (!initialData.isSent) {
       try {
         setLoading(true);
-        console.log(initialData);
-        await axios.patch(`/api/${params.storeId}/orders/${initialData.id}`, {
-          ...initialData,
-          isSent: true,
-        });
-
+        await axios.patch(
+          `/api/${params.storeId}/orders/${initialData.id}`,
+          {
+            ...initialData,
+            isSent: true,
+          }
+        );
         router.refresh();
         toast.success("Order is sent");
       } catch (error) {
@@ -84,15 +81,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
     }
   };
 
-  //TODO: - function that fetch data for a dedicated product and variant
-  // const URL = `http://localhost:3000/api/${initialData.storeId}/products`;
-
-  // const getProduct = async (id: string): Promise<Product> => {
-  //   const res = await fetch(`${URL}/${id}`);
-
-  //   return res.json();
-  // };
-
   return (
     <div className="container px-4 mx-auto">
       <AlertModal
@@ -102,7 +90,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description}></Heading>
+        <Heading
+          title="Order details"
+          description={
+            "More information about specific order"
+          }
+        />
         {initialData && (
           <Button
             variant="destructive"
@@ -115,37 +108,43 @@ export const OrderForm: React.FC<OrderFormProps> = ({ initialData }) => {
         )}
       </div>
       <Separator />
-
-      <h3 className="pt-4 text-xl font-bold">Order ID: {initialData.id}</h3>
+      <h3 className="pt-4 text-xl font-bold">
+        Order ID: {initialData.id}
+      </h3>
       <div className="p-2 mb-4 overflow-hidden shadow sm:rounded-lg">
         <div className="mb-2">
-          <strong className="text-gray-700">Phone:</strong> {initialData.phone}
+          <strong className="text-gray-700">Phone:</strong>{" "}
+          {initialData.phone}
         </div>
         <div className="mb-2">
-          <strong className="text-gray-700">Address:</strong>{" "}
+          <strong className="text-gray-700">
+            Address:
+          </strong>{" "}
           {initialData.address}
         </div>
         <div className="mb-2">
-          <strong className="text-gray-700">Is Paid:</strong>{" "}
+          <strong className="text-gray-700">
+            Is Paid:
+          </strong>{" "}
           {initialData.isPaid ? "Yes" : "No"}
         </div>
         <div>
-          <strong className="text-gray-700">Variants:</strong>
-          <div className="pl-6">
-            <>
-              {initialData.orderItems.map((variant, i) => (
-                <>
-                  <div key={i} className="mb-1">
-                    {variant.variantId} x {variant.quantity}
-                  </div>
-                </>
-              ))}
-            </>
+          <strong className="text-gray-700">
+            Variants:
+          </strong>
+          <div className="flex flex-col justify-center">
+            {variants.map((variant, i) => (
+              <div key={i} className="mb-1">
+                {variant} x {quantity[i]}
+              </div>
+            ))}
           </div>
         </div>
         <div className="flex justify-between mb-2">
           <div>
-            <strong className="text-gray-700">Is Sent:</strong>{" "}
+            <strong className="text-gray-700">
+              Is Sent:
+            </strong>{" "}
             {initialData.isSent ? "Yes" : "No"}
           </div>
           <Button onClick={onSent} className="py-1">

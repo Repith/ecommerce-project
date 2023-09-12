@@ -36,18 +36,25 @@ interface ColorFormProps {
   initialData: Color | null;
 }
 
-export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
+export const ColorForm: React.FC<ColorFormProps> = ({
+  initialData,
+}) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState("Pick a color...");
-  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [displayColorPicker, setDisplayColorPicker] =
+    useState(false);
 
   const title = initialData ? "Edit color" : "Create color";
-  const description = initialData ? "Edit color" : "Add a new color";
-  const toastMessage = initialData ? "Color updated." : "Color created.";
+  const description = initialData
+    ? "Edit color"
+    : "Add a new color";
+  const toastMessage = initialData
+    ? "Color updated."
+    : "Color created.";
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<ColorFormValues>({
@@ -80,7 +87,10 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/colors`, data);
+        await axios.post(
+          `/api/${params.storeId}/colors`,
+          data
+        );
       }
       router.refresh();
       router.push(`/${params.storeId}/colors`);
@@ -95,12 +105,16 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/colors/${params.colorId}`);
+      await axios.delete(
+        `/api/${params.storeId}/colors/${params.colorId}`
+      );
       router.refresh();
       router.push(`/${params.storeId}/colors`);
       toast.success("Color deleted.");
     } catch (error) {
-      toast.error("Make sure you removed all products using this color first.");
+      toast.error(
+        "Make sure you removed all products using this color first."
+      );
     } finally {
       setLoading(false);
       setOpen(false);
@@ -116,7 +130,10 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <nav className="flex items-center justify-between">
-        <Heading title={title} description={description}></Heading>
+        <Heading
+          title={title}
+          description={description}
+        ></Heading>
         {initialData && (
           <Button
             variant="destructive"
@@ -166,7 +183,9 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                         {...field}
                         value={color}
                         onClick={() =>
-                          setDisplayColorPicker(!displayColorPicker)
+                          setDisplayColorPicker(
+                            !displayColorPicker
+                          )
                         }
                       />
                     </FormControl>
@@ -174,13 +193,18 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                       <div style={popover}>
                         <div
                           style={cover}
-                          onClick={() => setDisplayColorPicker(false)}
+                          onClick={() =>
+                            setDisplayColorPicker(false)
+                          }
                         />
                         <SketchPicker
                           color={color}
                           onChange={(updatedColor) => {
                             setColor(updatedColor.hex);
-                            form.setValue("value", updatedColor.hex);
+                            form.setValue(
+                              "value",
+                              updatedColor.hex
+                            );
                           }}
                         />
                       </div>
@@ -191,7 +215,11 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
               )}
             />
           </section>
-          <Button disabled={loading} className="ml-auto" type="submit">
+          <Button
+            disabled={loading}
+            className="ml-auto"
+            type="submit"
+          >
             {action}
           </Button>
         </form>

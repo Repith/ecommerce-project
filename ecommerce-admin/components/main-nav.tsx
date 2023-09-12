@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+} from "next/navigation";
 import {
   AppWindow,
   Box,
-  CircleDollarSign,
   Copy,
   LayoutDashboard,
   Palette,
@@ -22,6 +25,7 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
 
   const routes = [
     {

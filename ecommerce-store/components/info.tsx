@@ -22,7 +22,8 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   const cart = useCart();
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-  const [filteredSizeOptions, setFilteredSizeOptions] = useState<string[]>([]);
+  const [filteredSizeOptions, setFilteredSizeOptions] =
+    useState<string[]>([]);
 
   const colorOptions = Array.from(
     new Set(data.variants.map((variant) => variant.colorId))
@@ -34,7 +35,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
       (variant) => variant.colorId === color
     );
     const relatedSizes = Array.from(
-      new Set(relatedVariants.map((variant) => variant.sizeId))
+      new Set(
+        relatedVariants.map((variant) => variant.sizeId)
+      )
     );
     setFilteredSizeOptions(relatedSizes);
   };
@@ -42,14 +45,11 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   const onAddToCart = () => {
     const variantToAdd = data.variants.find(
       (variant) =>
-        variant.colorId === selectedColor && variant.sizeId === selectedSize
+        variant.colorId === selectedColor &&
+        variant.sizeId === selectedSize
     );
 
-    console.log("INFO - Data", data);
-    console.log("INFO - VariantToADD", variantToAdd);
-
     if (variantToAdd) {
-      console.log("Selected Variant ID: ", variantToAdd);
       cart.addItem(data, variantToAdd);
     }
   };
@@ -57,7 +57,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
   return (
     <nav>
       {/* Name */}
-      <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
+      <h1 className="text-3xl font-bold text-gray-900">
+        {data.name}
+      </h1>
 
       {/* Price */}
       <section className="flex items-end justify-between mt-3">
@@ -70,7 +72,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
       {/* Size and Color */}
       <section className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-black">Color:</h3>
+          <h3 className="font-semibold text-black">
+            Color:
+          </h3>
           {colorOptions.map((color, index) => (
             <Button
               key={index}
@@ -87,7 +91,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         </div>
 
         <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-black">Size:</h3>
+          <h3 className="font-semibold text-black">
+            Size:
+          </h3>
           {filteredSizeOptions.map((size, index) => (
             <Button
               key={index}
@@ -107,7 +113,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Description</AccordionTrigger>
-            <AccordionContent>{data?.description}</AccordionContent>
+            <AccordionContent>
+              {data?.description}
+            </AccordionContent>
           </AccordionItem>
         </Accordion>
 

@@ -9,7 +9,10 @@ export async function POST(
 ) {
   try {
     const { userId } = auth();
-    const body = await req.json();
+    const body = (await req.json()) as {
+      label: string;
+      imageUrl: string;
+    };
 
     const { label, imageUrl } = body;
 
