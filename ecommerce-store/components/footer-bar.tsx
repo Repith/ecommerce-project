@@ -5,6 +5,7 @@ import { Category } from "@/types";
 
 const FooterBar = async () => {
   const categories: Category[] = await getCategories();
+  console.log(categories);
 
   const helpLinks = [
     "SALE FAQ",
@@ -45,32 +46,49 @@ const FooterBar = async () => {
         <div className="grid grid-cols-2 md:grid-cols-4 ">
           <nav>
             <h4 className="py-2">
-              <span className="border-b-4 border-accent">HELP</span>
-            </h4>
-            <ul className="py-2">{renderLinks(helpLinks)}</ul>
-          </nav>
-          <nav>
-            <h4 className="py-2">
-              <span className="border-b-4 border-accent">ABOUT US</span>
-            </h4>
-            <ul className="py-2">{renderLinks(aboutLinks)}</ul>
-          </nav>
-          <nav>
-            <h4 className="py-2">
-              <span className="border-b-4 border-accent">TERMS</span>
-            </h4>
-            <ul className="py-2">{renderLinks(termsLinks)}</ul>
-          </nav>
-          <nav>
-            <h4 className="py-2">
-              <span className="border-b-4 border-accent">BUY ONLINE</span>
+              <span className="border-b-4 border-accent">
+                HELP
+              </span>
             </h4>
             <ul className="py-2">
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link href={`/category/${category.id}`}>{category.name}</Link>
-                </li>
-              ))}
+              {renderLinks(helpLinks)}
+            </ul>
+          </nav>
+          <nav>
+            <h4 className="py-2">
+              <span className="border-b-4 border-accent">
+                ABOUT US
+              </span>
+            </h4>
+            <ul className="py-2">
+              {renderLinks(aboutLinks)}
+            </ul>
+          </nav>
+          <nav>
+            <h4 className="py-2">
+              <span className="border-b-4 border-accent">
+                TERMS
+              </span>
+            </h4>
+            <ul className="py-2">
+              {renderLinks(termsLinks)}
+            </ul>
+          </nav>
+          <nav>
+            <h4 className="py-2">
+              <span className="border-b-4 border-accent">
+                BUY ONLINE
+              </span>
+            </h4>
+            <ul className="py-2">
+              {categories &&
+                categories.map((category) => (
+                  <li key={category.id}>
+                    <Link href={`/category/${category.id}`}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </nav>
         </div>
