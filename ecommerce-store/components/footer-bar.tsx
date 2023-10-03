@@ -5,7 +5,6 @@ import { Category } from "@/types";
 
 const FooterBar = async () => {
   const categories: Category[] = await getCategories();
-  console.log(categories);
 
   const helpLinks = [
     "SALE FAQ",

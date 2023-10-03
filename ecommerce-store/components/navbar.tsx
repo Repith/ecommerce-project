@@ -15,7 +15,9 @@ import { Menu } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -30,12 +32,23 @@ const Navbar = () => {
     <nav className="sticky top-0 z-10 py-4 bg-white border-b-2 shadow-md border-accent/10 shadow-accent/5">
       <Container>
         <section className="relative flex items-center h-16 px-4 sm:px-6">
-          <button className="md:hidden" onClick={() => setIsOpen(true)}>
+          <button
+            className="md:hidden"
+            onClick={() => setIsOpen(true)}
+          >
             <Menu />
           </button>
           <ul className="w-full px-3 py-2 text-xl font-bold md:w-1/3 lg:w-1/5">
-            <Link href="/" className="flex ml-r lg:ml-0 gap-x-2">
-              <Image src={logo} alt="logo" height={36} width={150} />
+            <Link
+              href="/"
+              className="flex ml-r lg:ml-0 gap-x-2"
+            >
+              <Image
+                src={logo}
+                alt="logo"
+                height={36}
+                width={150}
+              />
             </Link>
           </ul>
 
