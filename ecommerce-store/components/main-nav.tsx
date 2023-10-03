@@ -16,7 +16,11 @@ interface MainNavProps {
   onClose?: () => void;
 }
 
-const MainNav: React.FC<MainNavProps> = ({ data, isOpen = false, onClose }) => {
+const MainNav: React.FC<MainNavProps> = ({
+  data,
+  isOpen = false,
+  onClose,
+}) => {
   const pathname = usePathname();
 
   const routes = data.map((route) => ({
@@ -81,7 +85,10 @@ const MainNav: React.FC<MainNavProps> = ({ data, isOpen = false, onClose }) => {
             <div className="w-full p-4 mx-auto bg-white rounded-lg shadow-lg shadow-accent/10 ">
               {/* Close button */}
               <div className="absolute top-0 right-0 items-center justify-end p-4">
-                <IconButton icon={<X size={15} />} onClick={onClose} />
+                <IconButton
+                  icon={<X size={15} />}
+                  onClick={onClose}
+                />
               </div>
 
               {/* Categories */}
