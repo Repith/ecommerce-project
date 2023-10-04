@@ -18,7 +18,8 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3001",
+            value:
+              "https://ecommerce-project-store-phi.vercel.app",
           },
           {
             key: "Access-Control-Allow-Methods",
