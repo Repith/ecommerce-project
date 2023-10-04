@@ -26,7 +26,9 @@ const Summary = () => {
   }, [searchParams, removeAll]);
 
   const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.product.price) * item.quantity;
+    return (
+      total + Number(item.product.price) * item.quantity
+    );
   }, 0);
 
   /* Checkout API to backend */
@@ -44,15 +46,20 @@ const Summary = () => {
       );
 
       window.location = response.data.url;
+      console.log(response);
     } catch (error: any) {
-      toast.error(error?.response?.data?.error || error.message);
+      toast.error(
+        error?.response?.data?.error || error.message
+      );
     }
   };
 
   return (
     <div className="px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
       {/* Order summary */}
-      <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
+      <h2 className="text-lg font-medium text-gray-900">
+        Order summary
+      </h2>
       <div className="mt-6 ">
         {items.map((item) => (
           <div
@@ -60,10 +67,12 @@ const Summary = () => {
             key={item.product.id}
           >
             <div className="flex flex-col text-sm font-light titems-center">
-              <span className="font-semibold">{item.product.name}</span>
+              <span className="font-semibold">
+                {item.product.name}
+              </span>
               <div className="text-xs">
-                {item.variant.colorId} | {item.variant.sizeId} (x{item.quantity}
-                )
+                {item.variant.colorId} |{" "}
+                {item.variant.sizeId} (x{item.quantity})
               </div>
             </div>
 
@@ -74,7 +83,9 @@ const Summary = () => {
           </div>
         ))}
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <div className="text-base font-medium text-gray-900">Order total</div>
+          <div className="text-base font-medium text-gray-900">
+            Order total
+          </div>
           <Currency value={totalPrice} />
         </div>
       </div>

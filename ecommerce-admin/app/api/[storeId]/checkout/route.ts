@@ -57,31 +57,36 @@ export async function POST(
     [];
 
   try {
-    const orderItems = productVariants.map((pv, index) => {
-      const quantity = quantities[index];
+    for (const [index, pv] of productVariants.entries()) {
+      const variant = await prismadb.variant.findUnique({
+        where: {
+          id: pv.variantId,
+        },
+        include: {
+          product: true,
+        },
+      });
 
-      if (quantity === undefined) {
+      if (variant.inStock < quantities[index]) {
         throw new Error(
-          `Quantity is undefined for productVariant at index ${index}`
+          `Not enough ${variant.product.name} in stock.`
         );
       }
 
-      return {
-        product: {
-          connect: {
-            id: pv.productId,
+      line_items.push({
+        quantity: quantities[index],
+        price_data: {
+          currency: "USD",
+          product_data: {
+            name: variant.product.name,
           },
+          unit_amount:
+            variant.product.price.toNumber() * 100,
         },
-        variant: {
-          connect: {
-            id: pv.variantId,
-          },
-        },
-        quantity,
-      };
-    });
+      });
+    }
 
-    if (orderItems.length === 0) {
+    if (line_items.length === 0) {
       throw new Error("No products available.");
     }
 
@@ -90,10 +95,27 @@ export async function POST(
         storeId: params.storeId,
         isPaid: false,
         orderItems: {
-          create: orderItems,
+          create: productVariants.map((pv, index) => ({
+            product: {
+              connect: {
+                id: pv.productId,
+              },
+            },
+            variant: {
+              connect: {
+                id: pv.variantId,
+              },
+            },
+            quantity: quantities[index],
+          })),
         },
       },
     });
+
+    console.log(
+      "4: Order has been successfully created:",
+      order
+    );
 
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -108,7 +130,6 @@ export async function POST(
         orderId: order.id,
       },
     });
-
     return NextResponse.json(
       { url: session.url },
       {
